@@ -73,7 +73,7 @@ Deployment Instructions (Follow these in order when deploying):
   * Deploying production branch to production
     * `git push production master`
   * Run Migrations:
-    * `heroku run rake db:migrate -- remote production`
+    * `heroku run rake db:migrate --remote production`
   * Restart server:
     * `heroku restart --remote production`
 
@@ -144,7 +144,5 @@ Deployment Instructions (Follow these in order when deploying):
 
   * Deploying production branch to production
     * `git push production master`
-  * Run Migrations:
-    * `heroku run rake db:migrate -- remote production`
   * Restart server:
     * `heroku restart --remote production`
