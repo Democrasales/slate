@@ -26,7 +26,7 @@ Deployment Setup Instructions:
 # Staging Deployment Commands
 git push staging staging:master
 
-heroku run rake db:migrate --remote production
+heroku run rake db:migrate --remote staging
 
 heroku restart --remote staging
 ```       
