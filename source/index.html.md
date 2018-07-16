@@ -13,6 +13,7 @@ toc_footers:
 includes:
   - deployment
   - products
+  - force_multiplier
 
 search: true
 ---
