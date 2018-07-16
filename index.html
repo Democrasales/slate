@@ -245,6 +245,41 @@
                   </li>
               </ul>
           </li>
+          <li>
+            <a href="#force-multiplier-api" class="toc-h1 toc-link" data-title="Force Multiplier API">Force Multiplier API</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#bootstrap-database" class="toc-h2 toc-link" data-title="Bootstrap Database">Bootstrap Database</a>
+                  </li>
+                  <li>
+                    <a href="#lead-statuses" class="toc-h2 toc-link" data-title="Lead Statuses">Lead Statuses</a>
+                  </li>
+                  <li>
+                    <a href="#new-lead" class="toc-h2 toc-link" data-title="New Lead">New Lead</a>
+                  </li>
+                  <li>
+                    <a href="#get-lead" class="toc-h2 toc-link" data-title="Get Lead">Get Lead</a>
+                  </li>
+                  <li>
+                    <a href="#create-lead" class="toc-h2 toc-link" data-title="Create Lead">Create Lead</a>
+                  </li>
+                  <li>
+                    <a href="#update-lead" class="toc-h2 toc-link" data-title="Update Lead">Update Lead</a>
+                  </li>
+                  <li>
+                    <a href="#create-questionanswer" class="toc-h2 toc-link" data-title="Create QuestionAnswer">Create QuestionAnswer</a>
+                  </li>
+                  <li>
+                    <a href="#bulk-create-questionanswer" class="toc-h2 toc-link" data-title="Bulk Create QuestionAnswer">Bulk Create QuestionAnswer</a>
+                  </li>
+                  <li>
+                    <a href="#update-questionanswer" class="toc-h2 toc-link" data-title="Update QuestionAnswer">Update QuestionAnswer</a>
+                  </li>
+                  <li>
+                    <a href="#bulk-update-questionanswer" class="toc-h2 toc-link" data-title="Bulk Update QuestionAnswer">Bulk Update QuestionAnswer</a>
+                  </li>
+              </ul>
+          </li>
       </div>
         <ul class="toc-footer">
             <li><a href='#'>Sign Up for a Developer Key</a></li>
@@ -282,7 +317,7 @@ git remote rename heroku staging
 <pre class="highlight shell tab-shell"><code><span class="c"># Staging Deployment Commands</span>
 git push staging staging:master
 
-heroku run rake db:migrate --remote production
+heroku run rake db:migrate --remote staging
 
 heroku restart --remote staging
 </code></pre>
@@ -344,7 +379,7 @@ heroku restart --remote production
 <li>Run Migrations:
 
 <ul>
-<li><code>heroku run rake db:migrate -- remote production</code></li>
+<li><code>heroku run rake db:migrate --remote production</code></li>
 </ul></li>
 <li>Restart server:
 
@@ -428,11 +463,6 @@ heroku restart --remote production
 
 <ul>
 <li><code>git push production master</code></li>
-</ul></li>
-<li>Run Migrations:
-
-<ul>
-<li><code>heroku run rake db:migrate -- remote production</code></li>
 </ul></li>
 <li>Restart server:
 
@@ -624,7 +654,1982 @@ heroku restart --remote production
 <li><code>heroku restart --remote production</code></li>
 </ul></li>
 </ul>
+<h1 id='force-multiplier-api'>Force Multiplier API</h1>
+<aside class="notice">This section is dedicated to Force Multiplier API endpoints.</aside>
+<h2 id='bootstrap-database'>Bootstrap Database</h2>
+<p>If using the API locally, seed your database with the questionnaire content:</p>
 
+<p><code>
+$&gt; rake db:seed:questionnaire
+</code></p>
+<h2 id='lead-statuses'>Lead Statuses</h2>
+<p>A lead has a <b>lead status</b> and a <b>questionnaire status</b>, each of which may change every time a lead is updated, depending on the state of other lead attributes.</p>
+
+<table><thead>
+<tr>
+<th>Status</th>
+<th>Values</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>lead_status</td>
+<td>follow_up, qualified, disqualified</td>
+</tr>
+<tr>
+<td>questionnaire_status</td>
+<td>unstarted, started, completed</td>
+</tr>
+</tbody></table>
+<h2 id='new-lead'>New Lead</h2>
+<p>This endpoint instantiates a lead.</p>
+<h3 id='http-request'>HTTP Request</h3>
+<p><code>GET http://democrasales.com/api/v1/leads/new</code></p>
+
+<blockquote>
+<p>A new lead looks like this:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="o">{</span>
+  <span class="s2">"id"</span>: null,
+  <span class="s2">"salesperson_id"</span>: null,
+  <span class="s2">"marketer_id"</span>: null,
+  <span class="s2">"customer_id"</span>: null,
+  <span class="s2">"address_id"</span>: null,
+  <span class="s2">"first_name"</span>: null,
+  <span class="s2">"last_name"</span>: null,
+  <span class="s2">"business_name"</span>: null,
+  <span class="s2">"phone"</span>: null,
+  <span class="s2">"email"</span>: null,
+  <span class="s2">"lead_status"</span>: <span class="s2">"follow_up"</span>,
+  <span class="s2">"questionnaire_status"</span>: <span class="s2">"unstarted"</span>,
+  <span class="s2">"questionnaire_answers"</span>: <span class="o">[]</span>,
+  <span class="s2">"notes"</span>: null,
+  <span class="s2">"follow_up_date"</span>: null,
+  <span class="s2">"visit_date"</span>: null,
+  <span class="s2">"created_at"</span>: null,
+  <span class="s2">"questionnaire"</span>: <span class="o">{</span>
+    <span class="s2">"id"</span>: 3,
+    <span class="s2">"name"</span>: <span class="s2">"Health &amp; Medical"</span>,
+    <span class="s2">"questions"</span>: <span class="o">[</span>
+      <span class="o">{</span>
+        <span class="s2">"id"</span>: 19,
+        <span class="s2">"type"</span>: <span class="s2">"MultipleChoiceQuestion"</span>,
+        <span class="s2">"content"</span>: <span class="s2">"If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?"</span>,
+        <span class="s2">"position"</span>: 1,
+        <span class="s2">"required"</span>: <span class="nb">true</span>,
+        <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+        <span class="s2">"next_question_id"</span>: 20,
+        <span class="s2">"prev_question_id"</span>: null,
+        <span class="s2">"question_options"</span>: <span class="o">[</span>
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 73,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Yes"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"yes"</span>,
+            <span class="s2">"position"</span>: 1
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 74,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"No"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"no"</span>,
+            <span class="s2">"position"</span>: 2
+          <span class="o">}</span>
+        <span class="o">]</span>
+      <span class="o">}</span>,
+      <span class="o">{</span>
+        <span class="s2">"id"</span>: 20,
+        <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+        <span class="s2">"content"</span>: <span class="s2">"How do you place orders?"</span>,
+        <span class="s2">"position"</span>: 2,
+        <span class="s2">"required"</span>: <span class="nb">true</span>,
+        <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+        <span class="s2">"next_question_id"</span>: 21,
+        <span class="s2">"prev_question_id"</span>: 19,
+        <span class="s2">"question_options"</span>: <span class="o">[</span>
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 75,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Online"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"online"</span>,
+            <span class="s2">"position"</span>: 1
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 76,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Phone"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"phone"</span>,
+            <span class="s2">"position"</span>: 2
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 77,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Fax"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"fax"</span>,
+            <span class="s2">"position"</span>: 3
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 78,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"E-mail"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"email"</span>,
+            <span class="s2">"position"</span>: 4
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 79,
+            <span class="s2">"input"</span>: <span class="s2">"text"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Other"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"other"</span>,
+            <span class="s2">"position"</span>: 5
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 80,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+            <span class="s2">"position"</span>: 6
+          <span class="o">}</span>
+        <span class="o">]</span>
+      <span class="o">}</span>,
+      <span class="o">{</span>
+        <span class="s2">"id"</span>: 21,
+        <span class="s2">"type"</span>: <span class="s2">"MultipleChoiceQuestion"</span>,
+        <span class="s2">"content"</span>: <span class="s2">"Do you know if you are currently affiliated with any Group Purchasing Organization?"</span>,
+        <span class="s2">"position"</span>: 3,
+        <span class="s2">"required"</span>: <span class="nb">true</span>,
+        <span class="s2">"has_questions"</span>: <span class="nb">true</span>,
+        <span class="s2">"next_question_id"</span>: 23,
+        <span class="s2">"prev_question_id"</span>: 20,
+        <span class="s2">"questions"</span>: <span class="o">[</span>
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 22,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"With which GPO are you affiliated?"</span>,
+            <span class="s2">"position"</span>: 1,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: null,
+            <span class="s2">"prev_question_id"</span>: null
+          <span class="o">}</span>
+        <span class="o">]</span>,
+        <span class="s2">"question_options"</span>: <span class="o">[</span>
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 81,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Yes"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"yes"</span>,
+            <span class="s2">"position"</span>: 1
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 82,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"No"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"no"</span>,
+            <span class="s2">"position"</span>: 2
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 83,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+            <span class="s2">"position"</span>: 3
+          <span class="o">}</span>
+        <span class="o">]</span>
+      <span class="o">}</span>,
+      <span class="o">{</span>
+        <span class="s2">"id"</span>: 23,
+        <span class="s2">"type"</span>: <span class="s2">"MultipleChoiceQuestion"</span>,
+        <span class="s2">"content"</span>: <span class="s2">"Would you be interested in purchasing high-quality, brand-name products you are familiar with at prices that are the same or better than your current distributor's private label brand?"</span>,
+        <span class="s2">"position"</span>: 4,
+        <span class="s2">"required"</span>: <span class="nb">true</span>,
+        <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+        <span class="s2">"next_question_id"</span>: 24,
+        <span class="s2">"prev_question_id"</span>: 21,
+        <span class="s2">"question_options"</span>: <span class="o">[</span>
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 90,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Yes"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"yes"</span>,
+            <span class="s2">"position"</span>: 1
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 91,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"No"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"no"</span>,
+            <span class="s2">"position"</span>: 2
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 92,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+            <span class="s2">"position"</span>: 3
+          <span class="o">}</span>
+        <span class="o">]</span>
+      <span class="o">}</span>,
+      <span class="o">{</span>
+        <span class="s2">"id"</span>: 24,
+        <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+        <span class="s2">"content"</span>: <span class="s2">"Rank the following concerns that you have with your current distribution (scale of 1-10 with 1 meaning not a concern at all and 10 being a major concern)."</span>,
+        <span class="s2">"position"</span>: 5,
+        <span class="s2">"required"</span>: <span class="nb">true</span>,
+        <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+        <span class="s2">"next_question_id"</span>: 25,
+        <span class="s2">"prev_question_id"</span>: 23,
+        <span class="s2">"question_options"</span>: <span class="o">[</span>
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 93,
+            <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Pricing"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"pricing"</span>,
+            <span class="s2">"position"</span>: 1
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 94,
+            <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Product Availability/Backorders"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"availability"</span>,
+            <span class="s2">"position"</span>: 2
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 95,
+            <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Product Quality"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"quality"</span>,
+            <span class="s2">"position"</span>: 3
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 96,
+            <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Customer Service"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"service"</span>,
+            <span class="s2">"position"</span>: 4
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 97,
+            <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Accessibility/Availability of your account manager"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"manager"</span>,
+            <span class="s2">"position"</span>: 5
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 98,
+            <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Equipment repair and availability of loaner equipment"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"equipment"</span>,
+            <span class="s2">"position"</span>: 6
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 99,
+            <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Accounting (invoicing, statements, credits and returns)"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"accounting"</span>,
+            <span class="s2">"position"</span>: 7
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 100,
+            <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Ease of Ordering"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"ordering"</span>,
+            <span class="s2">"position"</span>: 8
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 101,
+            <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Pricing"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"pricing"</span>,
+            <span class="s2">"position"</span>: 9
+          <span class="o">}</span>
+        <span class="o">]</span>
+      <span class="o">}</span>,
+      <span class="o">{</span>
+        <span class="s2">"id"</span>: 25,
+        <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+        <span class="s2">"content"</span>: <span class="s2">"From which distributor are you currently buying medical supplies?"</span>,
+        <span class="s2">"position"</span>: 6,
+        <span class="s2">"required"</span>: <span class="nb">true</span>,
+        <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+        <span class="s2">"next_question_id"</span>: 26,
+        <span class="s2">"prev_question_id"</span>: 24,
+        <span class="s2">"question_options"</span>: <span class="o">[</span>
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 102,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"McKesson"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"mckesson"</span>,
+            <span class="s2">"position"</span>: 1
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 103,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Henry Schein"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"henry_schein"</span>,
+            <span class="s2">"position"</span>: 2
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 104,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Medline"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"medline"</span>,
+            <span class="s2">"position"</span>: 3
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 105,
+            <span class="s2">"input"</span>: <span class="s2">"text"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"Other"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"other"</span>,
+            <span class="s2">"position"</span>: 4
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 106,
+            <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+            <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+            <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+            <span class="s2">"position"</span>: 5
+          <span class="o">}</span>
+        <span class="o">]</span>
+      <span class="o">}</span>,
+      <span class="o">{</span>
+        <span class="s2">"id"</span>: 26,
+        <span class="s2">"type"</span>: <span class="s2">"FreeTextQuestion"</span>,
+        <span class="s2">"content"</span>: <span class="s2">"Is there anything else that I haven't covered that you feel is important when evaluating or selecting a supplier?"</span>,
+        <span class="s2">"position"</span>: 7,
+        <span class="s2">"required"</span>: <span class="nb">false</span>,
+        <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+        <span class="s2">"next_question_id"</span>: 27,
+        <span class="s2">"prev_question_id"</span>: 25,
+        <span class="s2">"question_options"</span>: <span class="o">[</span>
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 107,
+            <span class="s2">"input"</span>: <span class="s2">"textarea"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+            <span class="s2">"label"</span>: null,
+            <span class="s2">"name"</span>: <span class="s2">"evaluating_supplier"</span>,
+            <span class="s2">"position"</span>: 1
+          <span class="o">}</span>
+        <span class="o">]</span>
+      <span class="o">}</span>,
+      <span class="o">{</span>
+        <span class="s2">"id"</span>: 27,
+        <span class="s2">"type"</span>: <span class="s2">"FreeTextQuestion"</span>,
+        <span class="s2">"content"</span>: <span class="s2">"If you could change one thing about your current supplier what would it be and why?"</span>,
+        <span class="s2">"position"</span>: 8,
+        <span class="s2">"required"</span>: <span class="nb">false</span>,
+        <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+        <span class="s2">"next_question_id"</span>: null,
+        <span class="s2">"prev_question_id"</span>: 26,
+        <span class="s2">"question_options"</span>: <span class="o">[</span>
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 108,
+            <span class="s2">"input"</span>: <span class="s2">"textarea"</span>,
+            <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+            <span class="s2">"label"</span>: null,
+            <span class="s2">"name"</span>: <span class="s2">"change_supplier"</span>,
+            <span class="s2">"position"</span>: 1
+          <span class="o">}</span>
+        <span class="o">]</span>
+      <span class="o">}</span>
+    <span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre><h2 id='get-lead'>Get Lead</h2>
+<p>This endpoint retrieves an existing lead.</p>
+<h3 id='http-request-2'>HTTP Request</h3>
+<p><code>GET http://democrasales.com/api/v1/leads/:id</code></p>
+
+<blockquote>
+<p>An existing lead looks like this:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="o">{</span>
+  <span class="s2">"customer"</span>: <span class="o">{</span>
+    <span class="s2">"id"</span>: 1,
+    <span class="s2">"categories"</span>: <span class="o">[{</span>
+      <span class="s2">"title"</span>: <span class="s2">"Bars"</span>,
+      <span class="s2">"alias"</span>: <span class="s2">"bars"</span>
+    <span class="o">}]</span>,
+    <span class="s2">"coordinates"</span>: <span class="o">{</span>
+      <span class="s2">"latitude"</span>: 40.7143528,
+      <span class="s2">"longitude"</span>: -74.0059731
+    <span class="o">}</span>,
+    <span class="s2">"name"</span>: <span class="s2">"Mourad Restaurant"</span>,
+    <span class="s2">"phone"</span>: <span class="s2">"+14156602500"</span>,
+    <span class="s2">"display_phone"</span>: <span class="s2">"+14156602500"</span>,
+    <span class="s2">"photos"</span>: <span class="o">[</span><span class="s2">"https://s3-media2.fl.yelpcdn.com/bphoto/wlbRTdS4LXvR1vR4sVwirA/o.jpg"</span>, <span class="s2">"https://s3-media4.fl.yelpcdn.com/bphoto/ULuBpYRQcRHpNOWGgfNaQA/o.jpg"</span>, <span class="s2">"https://s3-media2.fl.yelpcdn.com/bphoto/aagkD5lUHBxvZ9-9JJ-AeQ/o.jpg"</span><span class="o">]</span>,
+    <span class="s2">"url"</span>: <span class="s2">"https://www.yelp.com/biz/mourad-restaurant-san-francisco?adjust_creative=jMxsvyOFUo07wr15E7Y1Egu0026utm_campaign=yelp_api_v3u0026utm_medium=api_v3_business_lookupu0026utm_source=jMxsvyOFUo07wr15E7Y1Eg"</span>,
+    <span class="s2">"hours"</span>: <span class="o">[{</span>
+      <span class="s2">"open"</span>: <span class="o">[{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 0
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 1
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 2
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 3
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 4
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1700"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 5
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1700"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 6
+      <span class="o">}]</span>,
+      <span class="s2">"hours_type"</span>: <span class="s2">"REGULAR"</span>,
+      <span class="s2">"is_open_now"</span>: <span class="nb">false</span>
+    <span class="o">}]</span>,
+    <span class="s2">"yelp_id"</span>: <span class="s2">"mourad-restaurant-san-francisco"</span>,
+    <span class="s2">"location"</span>: <span class="o">{</span>
+      <span class="s2">"display_address"</span>: <span class="o">[</span><span class="s2">"2224 South Colorado Street"</span>, <span class="s2">"Philadelphia, PA 19145"</span><span class="o">]</span>,
+      <span class="s2">"address1"</span>: <span class="s2">"2224 South Colorado Street"</span>,
+      <span class="s2">"city"</span>: <span class="s2">"Philadelphia"</span>,
+      <span class="s2">"state"</span>: <span class="s2">"PA"</span>,
+      <span class="s2">"country"</span>: <span class="s2">"US"</span>,
+      <span class="s2">"zip_code"</span>: <span class="s2">"19145"</span>
+    <span class="o">}</span>,
+    <span class="s2">"lead"</span>: <span class="o">{</span>
+      <span class="s2">"id"</span>: 1,
+      <span class="s2">"salesperson_id"</span>: 2,
+      <span class="s2">"marketer_id"</span>: 3,
+      <span class="s2">"customer_id"</span>: 4,
+      <span class="s2">"address_id"</span>: 5,
+      <span class="s2">"first_name"</span>: <span class="s2">"John"</span>,
+      <span class="s2">"last_name"</span>: <span class="s2">"Doe"</span>,
+      <span class="s2">"business_name"</span>: <span class="s2">"Mourad Restaurant"</span>,
+      <span class="s2">"phone"</span>: <span class="s2">"123 456 7890"</span>,
+      <span class="s2">"email"</span>: <span class="s2">"owner@mourad.com"</span>,
+      <span class="s2">"lead_status"</span>: <span class="s2">"follow_up"</span>,
+      <span class="s2">"questionnaire_status"</span>: <span class="s2">"unstarted"</span>,
+      <span class="s2">"questionnaire_answers"</span>: <span class="o">[</span>
+        <span class="o">{</span>
+          <span class="s2">"id"</span>: 15,
+          <span class="s2">"question_id"</span>: 1,
+          <span class="s2">"question_option_id"</span>: 4,
+          <span class="s2">"value"</span>: <span class="s1">'6'</span>
+        <span class="o">}</span>,
+        <span class="o">{</span>
+          <span class="s2">"id"</span>: 16,
+          <span class="s2">"question_id"</span>: 1,
+          <span class="s2">"question_option_id"</span>: 6,
+          <span class="s2">"value"</span>: <span class="s1">'2'</span>
+        <span class="o">}</span>
+      <span class="o">]</span>,
+      <span class="s2">"notes"</span>: <span class="s2">"Will call back when owner is available"</span>,
+      <span class="s2">"follow_up_date"</span>: <span class="s2">"2018-08-16 12:40:25 -0400"</span>,
+      <span class="s2">"visit_date"</span>: <span class="s2">"2018-07-16 12:40:25 -0400"</span>,
+      <span class="s2">"created_at"</span>: <span class="s2">"2018-07-16 12:40:25 -0400"</span>,
+      <span class="s2">"questionnaire"</span>: <span class="o">{</span>
+        <span class="s2">"id"</span>: 3,
+        <span class="s2">"name"</span>: <span class="s2">"Health &amp; Medical"</span>,
+        <span class="s2">"questions"</span>: <span class="o">[{</span>
+            <span class="s2">"id"</span>: 19,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleChoiceQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?"</span>,
+            <span class="s2">"position"</span>: 1,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 20,
+            <span class="s2">"prev_question_id"</span>: null,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 73,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Yes"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"yes"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 74,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 20,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"How do you place orders?"</span>,
+            <span class="s2">"position"</span>: 2,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 21,
+            <span class="s2">"prev_question_id"</span>: 19,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 75,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Online"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"online"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 76,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Phone"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"phone"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 77,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Fax"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"fax"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 78,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"E-mail"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"email"</span>,
+                <span class="s2">"position"</span>: 4
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 79,
+                <span class="s2">"input"</span>: <span class="s2">"text"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Other"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"other"</span>,
+                <span class="s2">"position"</span>: 5
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 80,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+                <span class="s2">"position"</span>: 6
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 21,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleChoiceQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"Do you know if you are currently affiliated with any Group Purchasing Organization?"</span>,
+            <span class="s2">"position"</span>: 3,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">true</span>,
+            <span class="s2">"next_question_id"</span>: 23,
+            <span class="s2">"prev_question_id"</span>: 20,
+            <span class="s2">"questions"</span>: <span class="o">[{</span>
+              <span class="s2">"id"</span>: 22,
+              <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+              <span class="s2">"content"</span>: <span class="s2">"With which GPO are you affiliated?"</span>,
+              <span class="s2">"position"</span>: 1,
+              <span class="s2">"required"</span>: <span class="nb">true</span>,
+              <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+              <span class="s2">"next_question_id"</span>: null,
+              <span class="s2">"prev_question_id"</span>: null
+            <span class="o">}]</span>,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 81,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Yes"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"yes"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 82,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 83,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 23,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleChoiceQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"Would you be interested in purchasing high-quality, brand-name products you are familiar with at prices that are the same or better than your current distributor's private label brand?"</span>,
+            <span class="s2">"position"</span>: 4,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 24,
+            <span class="s2">"prev_question_id"</span>: 21,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 90,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Yes"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"yes"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 91,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 92,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 24,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"Rank the following concerns that you have with your current distribution (scale of 1-10 with 1 meaning not a concern at all and 10 being a major concern)."</span>,
+            <span class="s2">"position"</span>: 5,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 25,
+            <span class="s2">"prev_question_id"</span>: 23,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 93,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Pricing"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"pricing"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 94,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Product Availability/Backorders"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"availability"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 95,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Product Quality"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"quality"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 96,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Customer Service"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"service"</span>,
+                <span class="s2">"position"</span>: 4
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 97,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Accessibility/Availability of your account manager"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"manager"</span>,
+                <span class="s2">"position"</span>: 5
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 98,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Equipment repair and availability of loaner equipment"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"equipment"</span>,
+                <span class="s2">"position"</span>: 6
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 99,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Accounting (invoicing, statements, credits and returns)"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"accounting"</span>,
+                <span class="s2">"position"</span>: 7
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 100,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Ease of Ordering"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"ordering"</span>,
+                <span class="s2">"position"</span>: 8
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 101,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Pricing"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"pricing"</span>,
+                <span class="s2">"position"</span>: 9
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 25,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"From which distributor are you currently buying medical supplies?"</span>,
+            <span class="s2">"position"</span>: 6,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 26,
+            <span class="s2">"prev_question_id"</span>: 24,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 102,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"McKesson"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"mckesson"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 103,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Henry Schein"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"henry_schein"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 104,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Medline"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"medline"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 105,
+                <span class="s2">"input"</span>: <span class="s2">"text"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Other"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"other"</span>,
+                <span class="s2">"position"</span>: 4
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 106,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+                <span class="s2">"position"</span>: 5
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 26,
+            <span class="s2">"type"</span>: <span class="s2">"FreeTextQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"Is there anything else that I haven't covered that you feel is important when evaluating or selecting a supplier?"</span>,
+            <span class="s2">"position"</span>: 7,
+            <span class="s2">"required"</span>: <span class="nb">false</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 27,
+            <span class="s2">"prev_question_id"</span>: 25,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+              <span class="s2">"id"</span>: 107,
+              <span class="s2">"input"</span>: <span class="s2">"textarea"</span>,
+              <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+              <span class="s2">"label"</span>: null,
+              <span class="s2">"name"</span>: <span class="s2">"evaluating_supplier"</span>,
+              <span class="s2">"position"</span>: 1
+            <span class="o">}]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 27,
+            <span class="s2">"type"</span>: <span class="s2">"FreeTextQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"If you could change one thing about your current supplier what would it be and why?"</span>,
+            <span class="s2">"position"</span>: 8,
+            <span class="s2">"required"</span>: <span class="nb">false</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: null,
+            <span class="s2">"prev_question_id"</span>: 26,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+              <span class="s2">"id"</span>: 108,
+              <span class="s2">"input"</span>: <span class="s2">"textarea"</span>,
+              <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+              <span class="s2">"label"</span>: null,
+              <span class="s2">"name"</span>: <span class="s2">"change_supplier"</span>,
+              <span class="s2">"position"</span>: 1
+            <span class="o">}]</span>
+          <span class="o">}</span>
+        <span class="o">]</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre><h2 id='create-lead'>Create Lead</h2>
+<p>This endpoint creates a lead.</p>
+<h3 id='http-request-3'>HTTP Request</h3>
+<p><code>POST http://democrasales.com/api/v1/leads</code></p>
+<h3 id='query-parameters'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>yelp_id</td>
+<td>required</td>
+<td>Yelp ID of business</td>
+</tr>
+<tr>
+<td>first_name</td>
+<td>required</td>
+<td>Business contact&#39;s first name</td>
+</tr>
+<tr>
+<td>last_name</td>
+<td>required</td>
+<td>Business contact&#39;s last name</td>
+</tr>
+<tr>
+<td>phone</td>
+<td>required</td>
+<td>Business contact&#39;s phone number</td>
+</tr>
+<tr>
+<td>email</td>
+<td>optional</td>
+<td>Business contact&#39;s e-mail address</td>
+</tr>
+<tr>
+<td>follow_up_date</td>
+<td>required, if lead_status = &#39;follow_up&#39;</td>
+<td>Date to send follow up email</td>
+</tr>
+<tr>
+<td>notes</td>
+<td>optional</td>
+<td>Marketer&#39;s lead notes</td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>The response looks like this:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="o">{</span>
+  <span class="s2">"customer"</span>: <span class="o">{</span>
+    <span class="s2">"id"</span>: 1,
+    <span class="s2">"categories"</span>: <span class="o">[{</span>
+      <span class="s2">"title"</span>: <span class="s2">"Bars"</span>,
+      <span class="s2">"alias"</span>: <span class="s2">"bars"</span>
+    <span class="o">}]</span>,
+    <span class="s2">"coordinates"</span>: <span class="o">{</span>
+      <span class="s2">"latitude"</span>: 40.7143528,
+      <span class="s2">"longitude"</span>: -74.0059731
+    <span class="o">}</span>,
+    <span class="s2">"name"</span>: <span class="s2">"Mourad Restaurant"</span>,
+    <span class="s2">"phone"</span>: <span class="s2">"+14156602500"</span>,
+    <span class="s2">"display_phone"</span>: <span class="s2">"+14156602500"</span>,
+    <span class="s2">"photos"</span>: <span class="o">[</span><span class="s2">"https://s3-media2.fl.yelpcdn.com/bphoto/wlbRTdS4LXvR1vR4sVwirA/o.jpg"</span>, <span class="s2">"https://s3-media4.fl.yelpcdn.com/bphoto/ULuBpYRQcRHpNOWGgfNaQA/o.jpg"</span>, <span class="s2">"https://s3-media2.fl.yelpcdn.com/bphoto/aagkD5lUHBxvZ9-9JJ-AeQ/o.jpg"</span><span class="o">]</span>,
+    <span class="s2">"url"</span>: <span class="s2">"https://www.yelp.com/biz/mourad-restaurant-san-francisco?adjust_creative=jMxsvyOFUo07wr15E7Y1Egu0026utm_campaign=yelp_api_v3u0026utm_medium=api_v3_business_lookupu0026utm_source=jMxsvyOFUo07wr15E7Y1Eg"</span>,
+    <span class="s2">"hours"</span>: <span class="o">[{</span>
+      <span class="s2">"open"</span>: <span class="o">[{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 0
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 1
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 2
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 3
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 4
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1700"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 5
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1700"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 6
+      <span class="o">}]</span>,
+      <span class="s2">"hours_type"</span>: <span class="s2">"REGULAR"</span>,
+      <span class="s2">"is_open_now"</span>: <span class="nb">false</span>
+    <span class="o">}]</span>,
+    <span class="s2">"yelp_id"</span>: <span class="s2">"mourad-restaurant-san-francisco"</span>,
+    <span class="s2">"location"</span>: <span class="o">{</span>
+      <span class="s2">"display_address"</span>: <span class="o">[</span><span class="s2">"2224 South Colorado Street"</span>, <span class="s2">"Philadelphia, PA 19145"</span><span class="o">]</span>,
+      <span class="s2">"address1"</span>: <span class="s2">"2224 South Colorado Street"</span>,
+      <span class="s2">"city"</span>: <span class="s2">"Philadelphia"</span>,
+      <span class="s2">"state"</span>: <span class="s2">"PA"</span>,
+      <span class="s2">"country"</span>: <span class="s2">"US"</span>,
+      <span class="s2">"zip_code"</span>: <span class="s2">"19145"</span>
+    <span class="o">}</span>,
+    <span class="s2">"lead"</span>: <span class="o">{</span>
+      <span class="s2">"id"</span>: 1,
+      <span class="s2">"salesperson_id"</span>: 2,
+      <span class="s2">"marketer_id"</span>: 3,
+      <span class="s2">"customer_id"</span>: 4,
+      <span class="s2">"address_id"</span>: 5,
+      <span class="s2">"first_name"</span>: <span class="s2">"John"</span>,
+      <span class="s2">"last_name"</span>: <span class="s2">"Doe"</span>,
+      <span class="s2">"business_name"</span>: <span class="s2">"Mourad Restaurant"</span>,
+      <span class="s2">"phone"</span>: <span class="s2">"123 456 7890"</span>,
+      <span class="s2">"email"</span>: <span class="s2">"owner@mourad.com"</span>,
+      <span class="s2">"lead_status"</span>: <span class="s2">"follow_up"</span>,
+      <span class="s2">"questionnaire_status"</span>: <span class="s2">"unstarted"</span>,
+      <span class="s2">"questionnaire_answers"</span>: <span class="o">[</span>
+        <span class="o">{</span>
+          <span class="s2">"id"</span>: 15,
+          <span class="s2">"question_id"</span>: 1,
+          <span class="s2">"question_option_id"</span>: 4,
+          <span class="s2">"value"</span>: <span class="s1">'6'</span>
+        <span class="o">}</span>,
+        <span class="o">{</span>
+          <span class="s2">"id"</span>: 16,
+          <span class="s2">"question_id"</span>: 1,
+          <span class="s2">"question_option_id"</span>: 6,
+          <span class="s2">"value"</span>: <span class="s1">'2'</span>
+        <span class="o">}</span>
+      <span class="o">]</span>,
+      <span class="s2">"notes"</span>: <span class="s2">"Will call back when owner is available"</span>,
+      <span class="s2">"follow_up_date"</span>: <span class="s2">"2018-08-16 12:40:25 -0400"</span>,
+      <span class="s2">"visit_date"</span>: <span class="s2">"2018-07-16 12:40:25 -0400"</span>,
+      <span class="s2">"created_at"</span>: <span class="s2">"2018-07-16 12:40:25 -0400"</span>,
+      <span class="s2">"questionnaire"</span>: <span class="o">{</span>
+        <span class="s2">"id"</span>: 3,
+        <span class="s2">"name"</span>: <span class="s2">"Health &amp; Medical"</span>,
+        <span class="s2">"questions"</span>: <span class="o">[{</span>
+            <span class="s2">"id"</span>: 19,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleChoiceQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?"</span>,
+            <span class="s2">"position"</span>: 1,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 20,
+            <span class="s2">"prev_question_id"</span>: null,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 73,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Yes"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"yes"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 74,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 20,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"How do you place orders?"</span>,
+            <span class="s2">"position"</span>: 2,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 21,
+            <span class="s2">"prev_question_id"</span>: 19,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 75,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Online"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"online"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 76,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Phone"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"phone"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 77,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Fax"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"fax"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 78,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"E-mail"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"email"</span>,
+                <span class="s2">"position"</span>: 4
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 79,
+                <span class="s2">"input"</span>: <span class="s2">"text"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Other"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"other"</span>,
+                <span class="s2">"position"</span>: 5
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 80,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+                <span class="s2">"position"</span>: 6
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 21,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleChoiceQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"Do you know if you are currently affiliated with any Group Purchasing Organization?"</span>,
+            <span class="s2">"position"</span>: 3,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">true</span>,
+            <span class="s2">"next_question_id"</span>: 23,
+            <span class="s2">"prev_question_id"</span>: 20,
+            <span class="s2">"questions"</span>: <span class="o">[{</span>
+              <span class="s2">"id"</span>: 22,
+              <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+              <span class="s2">"content"</span>: <span class="s2">"With which GPO are you affiliated?"</span>,
+              <span class="s2">"position"</span>: 1,
+              <span class="s2">"required"</span>: <span class="nb">true</span>,
+              <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+              <span class="s2">"next_question_id"</span>: null,
+              <span class="s2">"prev_question_id"</span>: null
+            <span class="o">}]</span>,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 81,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Yes"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"yes"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 82,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 83,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 23,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleChoiceQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"Would you be interested in purchasing high-quality, brand-name products you are familiar with at prices that are the same or better than your current distributor's private label brand?"</span>,
+            <span class="s2">"position"</span>: 4,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 24,
+            <span class="s2">"prev_question_id"</span>: 21,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 90,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Yes"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"yes"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 91,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 92,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 24,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"Rank the following concerns that you have with your current distribution (scale of 1-10 with 1 meaning not a concern at all and 10 being a major concern)."</span>,
+            <span class="s2">"position"</span>: 5,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 25,
+            <span class="s2">"prev_question_id"</span>: 23,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 93,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Pricing"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"pricing"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 94,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Product Availability/Backorders"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"availability"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 95,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Product Quality"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"quality"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 96,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Customer Service"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"service"</span>,
+                <span class="s2">"position"</span>: 4
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 97,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Accessibility/Availability of your account manager"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"manager"</span>,
+                <span class="s2">"position"</span>: 5
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 98,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Equipment repair and availability of loaner equipment"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"equipment"</span>,
+                <span class="s2">"position"</span>: 6
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 99,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Accounting (invoicing, statements, credits and returns)"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"accounting"</span>,
+                <span class="s2">"position"</span>: 7
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 100,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Ease of Ordering"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"ordering"</span>,
+                <span class="s2">"position"</span>: 8
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 101,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Pricing"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"pricing"</span>,
+                <span class="s2">"position"</span>: 9
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 25,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"From which distributor are you currently buying medical supplies?"</span>,
+            <span class="s2">"position"</span>: 6,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 26,
+            <span class="s2">"prev_question_id"</span>: 24,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 102,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"McKesson"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"mckesson"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 103,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Henry Schein"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"henry_schein"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 104,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Medline"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"medline"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 105,
+                <span class="s2">"input"</span>: <span class="s2">"text"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Other"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"other"</span>,
+                <span class="s2">"position"</span>: 4
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 106,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+                <span class="s2">"position"</span>: 5
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 26,
+            <span class="s2">"type"</span>: <span class="s2">"FreeTextQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"Is there anything else that I haven't covered that you feel is important when evaluating or selecting a supplier?"</span>,
+            <span class="s2">"position"</span>: 7,
+            <span class="s2">"required"</span>: <span class="nb">false</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 27,
+            <span class="s2">"prev_question_id"</span>: 25,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+              <span class="s2">"id"</span>: 107,
+              <span class="s2">"input"</span>: <span class="s2">"textarea"</span>,
+              <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+              <span class="s2">"label"</span>: null,
+              <span class="s2">"name"</span>: <span class="s2">"evaluating_supplier"</span>,
+              <span class="s2">"position"</span>: 1
+            <span class="o">}]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 27,
+            <span class="s2">"type"</span>: <span class="s2">"FreeTextQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"If you could change one thing about your current supplier what would it be and why?"</span>,
+            <span class="s2">"position"</span>: 8,
+            <span class="s2">"required"</span>: <span class="nb">false</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: null,
+            <span class="s2">"prev_question_id"</span>: 26,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+              <span class="s2">"id"</span>: 108,
+              <span class="s2">"input"</span>: <span class="s2">"textarea"</span>,
+              <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+              <span class="s2">"label"</span>: null,
+              <span class="s2">"name"</span>: <span class="s2">"change_supplier"</span>,
+              <span class="s2">"position"</span>: 1
+            <span class="o">}]</span>
+          <span class="o">}</span>
+        <span class="o">]</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre><h2 id='update-lead'>Update Lead</h2>
+<p>This endpoint updates a specific lead.</p>
+<h3 id='http-request-4'>HTTP Request</h3>
+<p><code>PUT http://democrasales.com/api/v1/leads/:id</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>required</td>
+<td>Lead ID</td>
+</tr>
+<tr>
+<td>first_name</td>
+<td>required</td>
+<td>Business contact&#39;s first name</td>
+</tr>
+<tr>
+<td>last_name</td>
+<td>required</td>
+<td>Business contact&#39;s last name</td>
+</tr>
+<tr>
+<td>phone</td>
+<td>required</td>
+<td>Business contact&#39;s phone number</td>
+</tr>
+<tr>
+<td>email</td>
+<td>optional</td>
+<td>Business contact&#39;s e-mail address</td>
+</tr>
+<tr>
+<td>follow_up_date</td>
+<td>required, if lead_status = &#39;follow_up&#39;</td>
+<td>Date to send follow up email</td>
+</tr>
+<tr>
+<td>notes</td>
+<td>optional</td>
+<td>Marketer&#39;s lead notes</td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>The response looks like this:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="o">{</span>
+  <span class="s2">"customer"</span>: <span class="o">{</span>
+    <span class="s2">"id"</span>: 1,
+    <span class="s2">"categories"</span>: <span class="o">[{</span>
+      <span class="s2">"title"</span>: <span class="s2">"Bars"</span>,
+      <span class="s2">"alias"</span>: <span class="s2">"bars"</span>
+    <span class="o">}]</span>,
+    <span class="s2">"coordinates"</span>: <span class="o">{</span>
+      <span class="s2">"latitude"</span>: 40.7143528,
+      <span class="s2">"longitude"</span>: -74.0059731
+    <span class="o">}</span>,
+    <span class="s2">"name"</span>: <span class="s2">"Mourad Restaurant"</span>,
+    <span class="s2">"phone"</span>: <span class="s2">"+14156602500"</span>,
+    <span class="s2">"display_phone"</span>: <span class="s2">"+14156602500"</span>,
+    <span class="s2">"photos"</span>: <span class="o">[</span><span class="s2">"https://s3-media2.fl.yelpcdn.com/bphoto/wlbRTdS4LXvR1vR4sVwirA/o.jpg"</span>, <span class="s2">"https://s3-media4.fl.yelpcdn.com/bphoto/ULuBpYRQcRHpNOWGgfNaQA/o.jpg"</span>, <span class="s2">"https://s3-media2.fl.yelpcdn.com/bphoto/aagkD5lUHBxvZ9-9JJ-AeQ/o.jpg"</span><span class="o">]</span>,
+    <span class="s2">"url"</span>: <span class="s2">"https://www.yelp.com/biz/mourad-restaurant-san-francisco?adjust_creative=jMxsvyOFUo07wr15E7Y1Egu0026utm_campaign=yelp_api_v3u0026utm_medium=api_v3_business_lookupu0026utm_source=jMxsvyOFUo07wr15E7Y1Eg"</span>,
+    <span class="s2">"hours"</span>: <span class="o">[{</span>
+      <span class="s2">"open"</span>: <span class="o">[{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 0
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 1
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 2
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 3
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1130"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 4
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1700"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 5
+      <span class="o">}</span>, <span class="o">{</span>
+        <span class="s2">"is_overnight"</span>: <span class="nb">false</span>,
+        <span class="s2">"start"</span>: <span class="s2">"1700"</span>,
+        <span class="s2">"end"</span>: <span class="s2">"2200"</span>,
+        <span class="s2">"day"</span>: 6
+      <span class="o">}]</span>,
+      <span class="s2">"hours_type"</span>: <span class="s2">"REGULAR"</span>,
+      <span class="s2">"is_open_now"</span>: <span class="nb">false</span>
+    <span class="o">}]</span>,
+    <span class="s2">"yelp_id"</span>: <span class="s2">"mourad-restaurant-san-francisco"</span>,
+    <span class="s2">"location"</span>: <span class="o">{</span>
+      <span class="s2">"display_address"</span>: <span class="o">[</span><span class="s2">"2224 South Colorado Street"</span>, <span class="s2">"Philadelphia, PA 19145"</span><span class="o">]</span>,
+      <span class="s2">"address1"</span>: <span class="s2">"2224 South Colorado Street"</span>,
+      <span class="s2">"city"</span>: <span class="s2">"Philadelphia"</span>,
+      <span class="s2">"state"</span>: <span class="s2">"PA"</span>,
+      <span class="s2">"country"</span>: <span class="s2">"US"</span>,
+      <span class="s2">"zip_code"</span>: <span class="s2">"19145"</span>
+    <span class="o">}</span>,
+    <span class="s2">"lead"</span>: <span class="o">{</span>
+      <span class="s2">"id"</span>: 1,
+      <span class="s2">"salesperson_id"</span>: 2,
+      <span class="s2">"marketer_id"</span>: 3,
+      <span class="s2">"customer_id"</span>: 4,
+      <span class="s2">"address_id"</span>: 5,
+      <span class="s2">"first_name"</span>: <span class="s2">"John"</span>,
+      <span class="s2">"last_name"</span>: <span class="s2">"Doe"</span>,
+      <span class="s2">"business_name"</span>: <span class="s2">"Mourad Restaurant"</span>,
+      <span class="s2">"phone"</span>: <span class="s2">"123 456 7890"</span>,
+      <span class="s2">"email"</span>: <span class="s2">"owner@mourad.com"</span>,
+      <span class="s2">"lead_status"</span>: <span class="s2">"follow_up"</span>,
+      <span class="s2">"questionnaire_status"</span>: <span class="s2">"unstarted"</span>,
+      <span class="s2">"questionnaire_answers"</span>: <span class="o">[</span>
+        <span class="o">{</span>
+          <span class="s2">"id"</span>: 15,
+          <span class="s2">"question_id"</span>: 1,
+          <span class="s2">"question_option_id"</span>: 4,
+          <span class="s2">"value"</span>: <span class="s1">'6'</span>
+        <span class="o">}</span>,
+        <span class="o">{</span>
+          <span class="s2">"id"</span>: 16,
+          <span class="s2">"question_id"</span>: 1,
+          <span class="s2">"question_option_id"</span>: 6,
+          <span class="s2">"value"</span>: <span class="s1">'2'</span>
+        <span class="o">}</span>
+      <span class="o">]</span>,
+      <span class="s2">"notes"</span>: <span class="s2">"Will call back when owner is available"</span>,
+      <span class="s2">"follow_up_date"</span>: <span class="s2">"2018-08-16 12:40:25 -0400"</span>,
+      <span class="s2">"visit_date"</span>: <span class="s2">"2018-07-16 12:40:25 -0400"</span>,
+      <span class="s2">"created_at"</span>: <span class="s2">"2018-07-16 12:40:25 -0400"</span>,
+      <span class="s2">"questionnaire"</span>: <span class="o">{</span>
+        <span class="s2">"id"</span>: 3,
+        <span class="s2">"name"</span>: <span class="s2">"Health &amp; Medical"</span>,
+        <span class="s2">"questions"</span>: <span class="o">[{</span>
+            <span class="s2">"id"</span>: 19,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleChoiceQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?"</span>,
+            <span class="s2">"position"</span>: 1,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 20,
+            <span class="s2">"prev_question_id"</span>: null,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 73,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Yes"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"yes"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 74,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 20,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"How do you place orders?"</span>,
+            <span class="s2">"position"</span>: 2,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 21,
+            <span class="s2">"prev_question_id"</span>: 19,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 75,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Online"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"online"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 76,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Phone"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"phone"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 77,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Fax"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"fax"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 78,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"E-mail"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"email"</span>,
+                <span class="s2">"position"</span>: 4
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 79,
+                <span class="s2">"input"</span>: <span class="s2">"text"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Other"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"other"</span>,
+                <span class="s2">"position"</span>: 5
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 80,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+                <span class="s2">"position"</span>: 6
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 21,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleChoiceQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"Do you know if you are currently affiliated with any Group Purchasing Organization?"</span>,
+            <span class="s2">"position"</span>: 3,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">true</span>,
+            <span class="s2">"next_question_id"</span>: 23,
+            <span class="s2">"prev_question_id"</span>: 20,
+            <span class="s2">"questions"</span>: <span class="o">[{</span>
+              <span class="s2">"id"</span>: 22,
+              <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+              <span class="s2">"content"</span>: <span class="s2">"With which GPO are you affiliated?"</span>,
+              <span class="s2">"position"</span>: 1,
+              <span class="s2">"required"</span>: <span class="nb">true</span>,
+              <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+              <span class="s2">"next_question_id"</span>: null,
+              <span class="s2">"prev_question_id"</span>: null
+            <span class="o">}]</span>,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 81,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Yes"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"yes"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 82,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 83,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 23,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleChoiceQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"Would you be interested in purchasing high-quality, brand-name products you are familiar with at prices that are the same or better than your current distributor's private label brand?"</span>,
+            <span class="s2">"position"</span>: 4,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 24,
+            <span class="s2">"prev_question_id"</span>: 21,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 90,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Yes"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"yes"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 91,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 92,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 24,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"Rank the following concerns that you have with your current distribution (scale of 1-10 with 1 meaning not a concern at all and 10 being a major concern)."</span>,
+            <span class="s2">"position"</span>: 5,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 25,
+            <span class="s2">"prev_question_id"</span>: 23,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 93,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Pricing"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"pricing"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 94,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Product Availability/Backorders"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"availability"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 95,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Product Quality"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"quality"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 96,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Customer Service"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"service"</span>,
+                <span class="s2">"position"</span>: 4
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 97,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Accessibility/Availability of your account manager"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"manager"</span>,
+                <span class="s2">"position"</span>: 5
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 98,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Equipment repair and availability of loaner equipment"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"equipment"</span>,
+                <span class="s2">"position"</span>: 6
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 99,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Accounting (invoicing, statements, credits and returns)"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"accounting"</span>,
+                <span class="s2">"position"</span>: 7
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 100,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Ease of Ordering"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"ordering"</span>,
+                <span class="s2">"position"</span>: 8
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 101,
+                <span class="s2">"input"</span>: <span class="s2">"range"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"integer"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Pricing"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"pricing"</span>,
+                <span class="s2">"position"</span>: 9
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 25,
+            <span class="s2">"type"</span>: <span class="s2">"MultipleSelectQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"From which distributor are you currently buying medical supplies?"</span>,
+            <span class="s2">"position"</span>: 6,
+            <span class="s2">"required"</span>: <span class="nb">true</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 26,
+            <span class="s2">"prev_question_id"</span>: 24,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+                <span class="s2">"id"</span>: 102,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"McKesson"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"mckesson"</span>,
+                <span class="s2">"position"</span>: 1
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 103,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Henry Schein"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"henry_schein"</span>,
+                <span class="s2">"position"</span>: 2
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 104,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Medline"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"medline"</span>,
+                <span class="s2">"position"</span>: 3
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 105,
+                <span class="s2">"input"</span>: <span class="s2">"text"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"Other"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"other"</span>,
+                <span class="s2">"position"</span>: 4
+              <span class="o">}</span>,
+              <span class="o">{</span>
+                <span class="s2">"id"</span>: 106,
+                <span class="s2">"input"</span>: <span class="s2">"radio"</span>,
+                <span class="s2">"data_type"</span>: <span class="s2">"boolean"</span>,
+                <span class="s2">"label"</span>: <span class="s2">"No Answer"</span>,
+                <span class="s2">"name"</span>: <span class="s2">"no_answer"</span>,
+                <span class="s2">"position"</span>: 5
+              <span class="o">}</span>
+            <span class="o">]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 26,
+            <span class="s2">"type"</span>: <span class="s2">"FreeTextQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"Is there anything else that I haven't covered that you feel is important when evaluating or selecting a supplier?"</span>,
+            <span class="s2">"position"</span>: 7,
+            <span class="s2">"required"</span>: <span class="nb">false</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: 27,
+            <span class="s2">"prev_question_id"</span>: 25,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+              <span class="s2">"id"</span>: 107,
+              <span class="s2">"input"</span>: <span class="s2">"textarea"</span>,
+              <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+              <span class="s2">"label"</span>: null,
+              <span class="s2">"name"</span>: <span class="s2">"evaluating_supplier"</span>,
+              <span class="s2">"position"</span>: 1
+            <span class="o">}]</span>
+          <span class="o">}</span>,
+          <span class="o">{</span>
+            <span class="s2">"id"</span>: 27,
+            <span class="s2">"type"</span>: <span class="s2">"FreeTextQuestion"</span>,
+            <span class="s2">"content"</span>: <span class="s2">"If you could change one thing about your current supplier what would it be and why?"</span>,
+            <span class="s2">"position"</span>: 8,
+            <span class="s2">"required"</span>: <span class="nb">false</span>,
+            <span class="s2">"has_questions"</span>: <span class="nb">false</span>,
+            <span class="s2">"next_question_id"</span>: null,
+            <span class="s2">"prev_question_id"</span>: 26,
+            <span class="s2">"question_options"</span>: <span class="o">[{</span>
+              <span class="s2">"id"</span>: 108,
+              <span class="s2">"input"</span>: <span class="s2">"textarea"</span>,
+              <span class="s2">"data_type"</span>: <span class="s2">"string"</span>,
+              <span class="s2">"label"</span>: null,
+              <span class="s2">"name"</span>: <span class="s2">"change_supplier"</span>,
+              <span class="s2">"position"</span>: 1
+            <span class="o">}]</span>
+          <span class="o">}</span>
+        <span class="o">]</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre><h2 id='create-questionanswer'>Create QuestionAnswer</h2>
+<p>This endpoint creates a single question answer.</p>
+<h3 id='http-request-5'>HTTP Request</h3>
+<p><code>POST http://democrasales.com/api/v1/question_answers</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>question_id</td>
+<td>required</td>
+<td>question ID</td>
+</tr>
+<tr>
+<td>question_option_id</td>
+<td>required</td>
+<td>question option id</td>
+</tr>
+<tr>
+<td>value</td>
+<td>required</td>
+<td>The serialized string value of answer. The data type is determined by the associated QuestionOption.</td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>The response looks like this:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="o">{</span>
+  <span class="s2">"id"</span>: 15,
+  <span class="s2">"question_id"</span>: 1,
+  <span class="s2">"question_option_id"</span>: 4,
+  <span class="s2">"value"</span>: <span class="s1">'true'</span>
+<span class="o">}</span>
+</code></pre><h2 id='bulk-create-questionanswer'>Bulk Create QuestionAnswer</h2>
+<p>This endpoint creates multiple question answers.</p>
+<h3 id='http-request-6'>HTTP Request</h3>
+<p><code>POST http://democrasales.com/api/v1/question_answers/bulk_create</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>question_answers</td>
+<td>required</td>
+<td>array of question answers, each containing <b>question_id</b>, <b>question_option_id</b>, and <b>value</b></td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>The response looks like this:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="o">[{</span>
+  <span class="s2">"id"</span>: 15,
+  <span class="s2">"question_id"</span>: 1,
+  <span class="s2">"question_option_id"</span>: 4,
+  <span class="s2">"value"</span>: <span class="s1">'6'</span>
+<span class="o">}</span>,
+<span class="o">{</span>
+  <span class="s2">"id"</span>: 16,
+  <span class="s2">"question_id"</span>: 1,
+  <span class="s2">"question_option_id"</span>: 6,
+  <span class="s2">"value"</span>: <span class="s1">'2'</span>
+<span class="o">}]</span>
+</code></pre><h2 id='update-questionanswer'>Update QuestionAnswer</h2>
+<p>This endpoint updates a single question answer.</p>
+<h3 id='http-request-7'>HTTP Request</h3>
+<p><code>PUT http://democrasales.com/api/v1/question_answers/:id</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>required</td>
+<td>question answer ID</td>
+</tr>
+<tr>
+<td>value</td>
+<td>required</td>
+<td>The serialized string value of answer. The data type is determined by the associated QuestionOption.</td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>The response looks like this:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="o">{</span>
+  <span class="s2">"id"</span>: 15,
+  <span class="s2">"question_id"</span>: 1,
+  <span class="s2">"question_option_id"</span>: 4,
+  <span class="s2">"value"</span>: <span class="s1">'true'</span>
+<span class="o">}</span>
+</code></pre><h2 id='bulk-update-questionanswer'>Bulk Update QuestionAnswer</h2>
+<p>This endpoint updates multiple question answers.</p>
+<h3 id='http-request-8'>HTTP Request</h3>
+<p><code>PUT http://democrasales.com/api/v1/question_answers/bulk_update</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>question_answers</td>
+<td>required</td>
+<td>array of question answers, each containing <b>id</b> and <b>value</b></td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>The response looks like this:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="o">[{</span>
+  <span class="s2">"id"</span>: 15,
+  <span class="s2">"question_id"</span>: 1,
+  <span class="s2">"question_option_id"</span>: 4,
+  <span class="s2">"value"</span>: <span class="s1">'6'</span>
+<span class="o">}</span>,
+<span class="o">{</span>
+  <span class="s2">"id"</span>: 16,
+  <span class="s2">"question_id"</span>: 1,
+  <span class="s2">"question_option_id"</span>: 6,
+  <span class="s2">"value"</span>: <span class="s1">'2'</span>
+<span class="o">}]</span>
+</code></pre>
       </div>
       <div class="dark-box">
           <div class="lang-selector">
