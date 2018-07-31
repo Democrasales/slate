@@ -14,10 +14,21 @@ $> rake db:seed:questionnaire
 
 A lead has a <b>lead status</b> and a <b>questionnaire status</b>, each of which may change every time a lead is updated, depending on the state of other lead attributes.
 
-Status | Values
+### Lead Status
+
+Value | Description
 ---------- | -------
-lead_status | follow_up, qualified, disqualified
-questionnaire_status | unstarted, started, completed
+follow_up | The user has created the lead but has not yet completed the questionnaire's required questions.
+qualified | The user has created the lead and completed the questionnaire's required questions, having answered "Yes" to Question 1 and provided an answer to questions 2 through 7.
+disqualified | The user has completed the questionnaire's required questions, having answered "No" to Question 1 which ends the questionnaire.
+
+### Questionnaire Status
+
+Value | Description
+---------- | -------
+unstarted | The user has created the lead but has not yet answered any questions on the questionnaire.
+started | The user has created the lead and answered some, but not all, of the required questions on the questionnaire.
+completed | The user has created the lead and answered all required questions on the questionnaire.
 
 ## New Lead
 
@@ -30,379 +41,350 @@ This endpoint instantiates a lead.
 > A new lead looks like this:
 
 ```shell
-{
-  "id": null,
-  "salesperson_id": null,
-  "marketer_id": null,
-  "customer_id": null,
-  "address_id": null,
-  "first_name": null,
-  "last_name": null,
-  "business_name": null,
-  "phone": null,
-  "email": null,
-  "lead_status": "follow_up",
-  "questionnaire_status": "unstarted",
-  "questionnaire_answers": [],
-  "notes": null,
-  "follow_up_date": null,
-  "visit_date": null,
-  "created_at": null,
-  "questionnaire": {
-    "id": 3,
-    "name": "Health & Medical",
-    "questions": [
-      {
-        "id": 19,
-        "type": "MultipleChoiceQuestion",
-        "content": "If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?",
-        "position": 1,
-        "required": true,
-        "has_questions": false,
-        "next_question_id": 20,
-        "prev_question_id": null,
-        "question_options": [
-          {
-            "id": 73,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "Yes",
-            "name": "yes",
-            "position": 1
-          },
-          {
-            "id": 74,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "No",
-            "name": "no",
-            "position": 2
-          }
-        ]
-      },
-      {
-        "id": 20,
-        "type": "MultipleSelectQuestion",
-        "content": "How do you place orders?",
-        "position": 2,
-        "required": true,
-        "has_questions": false,
-        "next_question_id": 21,
-        "prev_question_id": 19,
-        "question_options": [
-          {
-            "id": 75,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "Online",
-            "name": "online",
-            "position": 1
-          },
-          {
-            "id": 76,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "Phone",
-            "name": "phone",
-            "position": 2
-          },
-          {
-            "id": 77,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "Fax",
-            "name": "fax",
-            "position": 3
-          },
-          {
-            "id": 78,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "E-mail",
-            "name": "email",
-            "position": 4
-          },
-          {
-            "id": 79,
-            "input": "text",
-            "data_type": "string",
-            "label": "Other",
-            "name": "other",
-            "position": 5
-          },
-          {
-            "id": 80,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "No Answer",
-            "name": "no_answer",
-            "position": 6
-          }
-        ]
-      },
-      {
-        "id": 21,
-        "type": "MultipleChoiceQuestion",
-        "content": "Do you know if you are currently affiliated with any Group Purchasing Organization?",
-        "position": 3,
-        "required": true,
-        "has_questions": true,
-        "next_question_id": 23,
-        "prev_question_id": 20,
-        "questions": [
-          {
-            "id": 22,
-            "type": "MultipleSelectQuestion",
-            "content": "With which GPO are you affiliated?",
-            "position": 1,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": null,
-            "prev_question_id": null
-          }
-        ],
-        "question_options": [
-          {
-            "id": 81,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "Yes",
-            "name": "yes",
-            "position": 1
-          },
-          {
-            "id": 82,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "No",
-            "name": "no",
-            "position": 2
-          },
-          {
-            "id": 83,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "No Answer",
-            "name": "no_answer",
-            "position": 3
-          }
-        ]
-      },
-      {
-        "id": 23,
-        "type": "MultipleChoiceQuestion",
-        "content": "Would you be interested in purchasing high-quality, brand-name products you are familiar with at prices that are the same or better than your current distributor's private label brand?",
-        "position": 4,
-        "required": true,
-        "has_questions": false,
-        "next_question_id": 24,
-        "prev_question_id": 21,
-        "question_options": [
-          {
-            "id": 90,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "Yes",
-            "name": "yes",
-            "position": 1
-          },
-          {
-            "id": 91,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "No",
-            "name": "no",
-            "position": 2
-          },
-          {
-            "id": 92,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "No Answer",
-            "name": "no_answer",
-            "position": 3
-          }
-        ]
-      },
-      {
-        "id": 24,
-        "type": "MultipleSelectQuestion",
-        "content": "Rank the following concerns that you have with your current distribution (scale of 1-10 with 1 meaning not a concern at all and 10 being a major concern).",
-        "position": 5,
-        "required": true,
-        "has_questions": false,
-        "next_question_id": 25,
-        "prev_question_id": 23,
-        "question_options": [
-          {
-            "id": 93,
-            "input": "range",
-            "data_type": "integer",
-            "label": "Pricing",
-            "name": "pricing",
-            "position": 1
-          },
-          {
-            "id": 94,
-            "input": "range",
-            "data_type": "integer",
-            "label": "Product Availability/Backorders",
-            "name": "availability",
-            "position": 2
-          },
-          {
-            "id": 95,
-            "input": "range",
-            "data_type": "integer",
-            "label": "Product Quality",
-            "name": "quality",
-            "position": 3
-          },
-          {
-            "id": 96,
-            "input": "range",
-            "data_type": "integer",
-            "label": "Customer Service",
-            "name": "service",
-            "position": 4
-          },
-          {
-            "id": 97,
-            "input": "range",
-            "data_type": "integer",
-            "label": "Accessibility/Availability of your account manager",
-            "name": "manager",
-            "position": 5
-          },
-          {
-            "id": 98,
-            "input": "range",
-            "data_type": "integer",
-            "label": "Equipment repair and availability of loaner equipment",
-            "name": "equipment",
-            "position": 6
-          },
-          {
-            "id": 99,
-            "input": "range",
-            "data_type": "integer",
-            "label": "Accounting (invoicing, statements, credits and returns)",
-            "name": "accounting",
-            "position": 7
-          },
-          {
-            "id": 100,
-            "input": "range",
-            "data_type": "integer",
-            "label": "Ease of Ordering",
-            "name": "ordering",
-            "position": 8
-          },
-          {
-            "id": 101,
-            "input": "range",
-            "data_type": "integer",
-            "label": "Pricing",
-            "name": "pricing",
-            "position": 9
-          }
-        ]
-      },
-      {
-        "id": 25,
-        "type": "MultipleSelectQuestion",
-        "content": "From which distributor are you currently buying medical supplies?",
-        "position": 6,
-        "required": true,
-        "has_questions": false,
-        "next_question_id": 26,
-        "prev_question_id": 24,
-        "question_options": [
-          {
-            "id": 102,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "McKesson",
-            "name": "mckesson",
-            "position": 1
-          },
-          {
-            "id": 103,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "Henry Schein",
-            "name": "henry_schein",
-            "position": 2
-          },
-          {
-            "id": 104,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "Medline",
-            "name": "medline",
-            "position": 3
-          },
-          {
-            "id": 105,
-            "input": "text",
-            "data_type": "string",
-            "label": "Other",
-            "name": "other",
-            "position": 4
-          },
-          {
-            "id": 106,
-            "input": "radio",
-            "data_type": "boolean",
-            "label": "No Answer",
-            "name": "no_answer",
-            "position": 5
-          }
-        ]
-      },
-      {
-        "id": 26,
-        "type": "FreeTextQuestion",
-        "content": "Is there anything else that I haven't covered that you feel is important when evaluating or selecting a supplier?",
-        "position": 7,
-        "required": false,
-        "has_questions": false,
-        "next_question_id": 27,
-        "prev_question_id": 25,
-        "question_options": [
-          {
-            "id": 107,
-            "input": "textarea",
-            "data_type": "string",
-            "label": null,
-            "name": "evaluating_supplier",
-            "position": 1
-          }
-        ]
-      },
-      {
-        "id": 27,
-        "type": "FreeTextQuestion",
-        "content": "If you could change one thing about your current supplier what would it be and why?",
-        "position": 8,
-        "required": false,
-        "has_questions": false,
-        "next_question_id": null,
-        "prev_question_id": 26,
-        "question_options": [
-          {
-            "id": 108,
-            "input": "textarea",
-            "data_type": "string",
-            "label": null,
-            "name": "change_supplier",
-            "position": 1
-          }
-        ]
-      }
-    ]
-  }
-}
+{"id"=>nil,
+ "salesperson_id"=>nil,
+ "marketer_id"=>nil,
+ "customer_id"=>nil,
+ "address_id"=>nil,
+ "first_name"=>nil,
+ "last_name"=>nil,
+ "business_name"=>nil,
+ "phone"=>nil,
+ "email"=>nil,
+ "lead_status"=>"follow_up",
+ "questionnaire_status"=>"unstarted",
+ "current_question"=>
+  {"id"=>1,
+   "questionnaire_id"=>1,
+   "content"=>
+    "If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?",
+   "position"=>1,
+   "parent_question_id"=>nil,
+   "required"=>true,
+   "next_question_id"=>2,
+   "prev_question_id"=>nil,
+   "created_at"=>"2018-07-30T12:46:46.535-04:00",
+   "updated_at"=>"2018-07-30T12:46:46.841-04:00",
+   "name"=>"account_manager_proposal"},
+ "questionnaire_answers"=>[],
+ "notes"=>nil,
+ "follow_up_date"=>nil,
+ "visit_date"=>nil,
+ "versions"=>[],
+ "created_at"=>nil,
+ "updated_at"=>nil,
+ "questionnaire"=>
+  {"id"=>1,
+   "name"=>"Health & Medical",
+   "questions"=>
+    [{"id"=>1,
+      "type"=>"MultipleChoiceQuestion",
+      "content"=>
+       "If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?",
+      "position"=>1,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>2,
+      "prev_question_id"=>nil,
+      "question_options"=>
+       [{"id"=>1,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Yes",
+         "name"=>"yes",
+         "position"=>1},
+        {"id"=>2,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No",
+         "name"=>"no",
+         "position"=>2}]},
+     {"id"=>2,
+      "type"=>"MultipleSelectQuestion",
+      "content"=>"How do you place orders?",
+      "position"=>2,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>3,
+      "prev_question_id"=>1,
+      "question_options"=>
+       [{"id"=>3,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Online",
+         "name"=>"online",
+         "position"=>1},
+        {"id"=>4,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Phone",
+         "name"=>"phone",
+         "position"=>2},
+        {"id"=>5,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Fax",
+         "name"=>"fax",
+         "position"=>3},
+        {"id"=>6,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"E-mail",
+         "name"=>"email",
+         "position"=>4},
+        {"id"=>7,
+         "input"=>"text",
+         "data_type"=>"string",
+         "label"=>"Other",
+         "name"=>"other",
+         "position"=>5},
+        {"id"=>8,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>6}]},
+     {"id"=>3,
+      "type"=>"MultipleChoiceQuestion",
+      "content"=>
+       "Do you know if you are currently affiliated with any Group Purchasing Organization?",
+      "position"=>3,
+      "required"=>true,
+      "has_questions"=>true,
+      "next_question_id"=>5,
+      "prev_question_id"=>2,
+      "questions"=>
+       [{"id"=>4,
+         "type"=>"MultipleSelectQuestion",
+         "content"=>"With which GPO are you affiliated?",
+         "position"=>1,
+         "required"=>true,
+         "has_questions"=>false,
+         "next_question_id"=>nil,
+         "prev_question_id"=>nil,
+         "question_options"=>
+          [{"id"=>12,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"Premier",
+            "name"=>"premier",
+            "position"=>1},
+           {"id"=>13,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"HPG",
+            "name"=>"hpg",
+            "position"=>2},
+           {"id"=>14,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"Vizient",
+            "name"=>"vizient",
+            "position"=>3},
+           {"id"=>15,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"Intalare",
+            "name"=>"intalare",
+            "position"=>4},
+           {"id"=>16,
+            "input"=>"text",
+            "data_type"=>"string",
+            "label"=>"Other",
+            "name"=>"other",
+            "position"=>5},
+           {"id"=>17,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"No Answer",
+            "name"=>"no_answer",
+            "position"=>6}]}],
+      "question_options"=>
+       [{"id"=>9,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Yes",
+         "name"=>"yes",
+         "position"=>1},
+        {"id"=>10,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No",
+         "name"=>"no",
+         "position"=>2},
+        {"id"=>11,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>3}]},
+     {"id"=>5,
+      "type"=>"MultipleChoiceQuestion",
+      "content"=>
+       "Would you be interested in purchasing high-quality, brand-name products you are familiar with at prices that are the same or better than your current distributor's private label brand?",
+      "position"=>4,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>6,
+      "prev_question_id"=>3,
+      "question_options"=>
+       [{"id"=>18,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Yes",
+         "name"=>"yes",
+         "position"=>1},
+        {"id"=>19,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No",
+         "name"=>"no",
+         "position"=>2},
+        {"id"=>20,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>3}]},
+     {"id"=>6,
+      "type"=>"MultipleSelectQuestion",
+      "content"=>
+       "Rank the following concerns that you have with your current distribution (scale of 1-10 with 1 meaning not a concern at all and 10 being a major concern).",
+      "position"=>5,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>7,
+      "prev_question_id"=>5,
+      "question_options"=>
+       [{"id"=>21,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Pricing",
+         "name"=>"pricing",
+         "position"=>1},
+        {"id"=>22,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Product Availability/Backorders",
+         "name"=>"availability",
+         "position"=>2},
+        {"id"=>23,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Product Quality",
+         "name"=>"quality",
+         "position"=>3},
+        {"id"=>24,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Delivery",
+         "name"=>"delivery",
+         "position"=>4},
+        {"id"=>25,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Customer Service",
+         "name"=>"service",
+         "position"=>5},
+        {"id"=>26,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>
+          "Accessibility/Availability of your account manager",
+         "name"=>"manager",
+         "position"=>6},
+        {"id"=>27,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>
+          "Equipment repair and availability of loaner equipment",
+         "name"=>"equipment",
+         "position"=>7},
+        {"id"=>28,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>
+          "Accounting (invoicing, statements, credits and returns)",
+         "name"=>"accounting",
+         "position"=>8},
+        {"id"=>29,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Ease of Ordering",
+         "name"=>"ordering",
+         "position"=>9}]},
+     {"id"=>7,
+      "type"=>"MultipleSelectQuestion",
+      "content"=>
+       "From which distributor are you currently buying medical supplies?",
+      "position"=>6,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>8,
+      "prev_question_id"=>6,
+      "question_options"=>
+       [{"id"=>30,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"McKesson",
+         "name"=>"mckesson",
+         "position"=>1},
+        {"id"=>31,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Henry Schein",
+         "name"=>"henry_schein",
+         "position"=>2},
+        {"id"=>32,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Medline",
+         "name"=>"medline",
+         "position"=>3},
+        {"id"=>33,
+         "input"=>"text",
+         "data_type"=>"string",
+         "label"=>"Other",
+         "name"=>"other",
+         "position"=>4},
+        {"id"=>34,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>5}]},
+     {"id"=>8,
+      "type"=>"FreeTextQuestion",
+      "content"=>
+       "Is there anything else that I haven't covered that you feel is important when evaluating or selecting a supplier?",
+      "position"=>7,
+      "required"=>false,
+      "has_questions"=>false,
+      "next_question_id"=>9,
+      "prev_question_id"=>7,
+      "question_options"=>
+       [{"id"=>35,
+         "input"=>"textarea",
+         "data_type"=>"string",
+         "label"=>nil,
+         "name"=>"evaluating_supplier",
+         "position"=>1}]},
+     {"id"=>9,
+      "type"=>"FreeTextQuestion",
+      "content"=>
+       "If you could change one thing about your current supplier what would it be and why?",
+      "position"=>8,
+      "required"=>false,
+      "has_questions"=>false,
+      "next_question_id"=>nil,
+      "prev_question_id"=>8,
+      "question_options"=>
+       [{"id"=>36,
+         "input"=>"textarea",
+         "data_type"=>"string",
+         "label"=>nil,
+         "name"=>"change_supplier",
+         "position"=>1}]}]}}
 ```
 
 ## Get Lead
@@ -416,445 +398,404 @@ This endpoint retrieves an existing lead.
 > An existing lead looks like this:
 
 ```shell
-{
-  "customer": {
-    "id": 1,
-    "categories": [{
-      "title": "Bars",
-      "alias": "bars"
-    }],
-    "coordinates": {
-      "latitude": 40.7143528,
-      "longitude": -74.0059731
-    },
-    "name": "Mourad Restaurant",
-    "phone": "+14156602500",
-    "display_phone": "+14156602500",
-    "photos": ["https://s3-media2.fl.yelpcdn.com/bphoto/wlbRTdS4LXvR1vR4sVwirA/o.jpg", "https://s3-media4.fl.yelpcdn.com/bphoto/ULuBpYRQcRHpNOWGgfNaQA/o.jpg", "https://s3-media2.fl.yelpcdn.com/bphoto/aagkD5lUHBxvZ9-9JJ-AeQ/o.jpg"],
-    "url": "https://www.yelp.com/biz/mourad-restaurant-san-francisco?adjust_creative=jMxsvyOFUo07wr15E7Y1Egu0026utm_campaign=yelp_api_v3u0026utm_medium=api_v3_business_lookupu0026utm_source=jMxsvyOFUo07wr15E7Y1Eg",
-    "hours": [{
-      "open": [{
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 0
-      }, {
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 1
-      }, {
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 2
-      }, {
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 3
-      }, {
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 4
-      }, {
-        "is_overnight": false,
-        "start": "1700",
-        "end": "2200",
-        "day": 5
-      }, {
-        "is_overnight": false,
-        "start": "1700",
-        "end": "2200",
-        "day": 6
-      }],
-      "hours_type": "REGULAR",
-      "is_open_now": false
-    }],
-    "yelp_id": "mourad-restaurant-san-francisco",
-    "location": {
-      "display_address": ["2224 South Colorado Street", "Philadelphia, PA 19145"],
-      "address1": "2224 South Colorado Street",
-      "city": "Philadelphia",
-      "state": "PA",
-      "country": "US",
-      "zip_code": "19145"
-    },
-    "lead": {
-      "id": 1,
-      "salesperson_id": 2,
-      "marketer_id": 3,
-      "customer_id": 4,
-      "address_id": 5,
-      "first_name": "John",
-      "last_name": "Doe",
-      "business_name": "Mourad Restaurant",
-      "phone": "123 456 7890",
-      "email": "owner@mourad.com",
-      "lead_status": "follow_up",
-      "questionnaire_status": "unstarted",
-      "questionnaire_answers": [
-        {
-          "id": 15,
-          "question_id": 1,
-          "question_option_id": 4,
-          "value": '6'
-        },
-        {
-          "id": 16,
-          "question_id": 1,
-          "question_option_id": 6,
-          "value": '2'
-        }
-      ],
-      "notes": "Will call back when owner is available",
-      "follow_up_date": "2018-08-16 12:40:25 -0400",
-      "visit_date": "2018-07-16 12:40:25 -0400",
-      "created_at": "2018-07-16 12:40:25 -0400",
-      "questionnaire": {
-        "id": 3,
-        "name": "Health & Medical",
-        "questions": [{
-            "id": 19,
-            "type": "MultipleChoiceQuestion",
-            "content": "If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?",
-            "position": 1,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 20,
-            "prev_question_id": null,
-            "question_options": [{
-                "id": 73,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Yes",
-                "name": "yes",
-                "position": 1
-              },
-              {
-                "id": 74,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No",
-                "name": "no",
-                "position": 2
-              }
-            ]
-          },
-          {
-            "id": 20,
-            "type": "MultipleSelectQuestion",
-            "content": "How do you place orders?",
-            "position": 2,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 21,
-            "prev_question_id": 19,
-            "question_options": [{
-                "id": 75,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Online",
-                "name": "online",
-                "position": 1
-              },
-              {
-                "id": 76,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Phone",
-                "name": "phone",
-                "position": 2
-              },
-              {
-                "id": 77,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Fax",
-                "name": "fax",
-                "position": 3
-              },
-              {
-                "id": 78,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "E-mail",
-                "name": "email",
-                "position": 4
-              },
-              {
-                "id": 79,
-                "input": "text",
-                "data_type": "string",
-                "label": "Other",
-                "name": "other",
-                "position": 5
-              },
-              {
-                "id": 80,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No Answer",
-                "name": "no_answer",
-                "position": 6
-              }
-            ]
-          },
-          {
-            "id": 21,
-            "type": "MultipleChoiceQuestion",
-            "content": "Do you know if you are currently affiliated with any Group Purchasing Organization?",
-            "position": 3,
-            "required": true,
-            "has_questions": true,
-            "next_question_id": 23,
-            "prev_question_id": 20,
-            "questions": [{
-              "id": 22,
-              "type": "MultipleSelectQuestion",
-              "content": "With which GPO are you affiliated?",
-              "position": 1,
-              "required": true,
-              "has_questions": false,
-              "next_question_id": null,
-              "prev_question_id": null
-            }],
-            "question_options": [{
-                "id": 81,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Yes",
-                "name": "yes",
-                "position": 1
-              },
-              {
-                "id": 82,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No",
-                "name": "no",
-                "position": 2
-              },
-              {
-                "id": 83,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No Answer",
-                "name": "no_answer",
-                "position": 3
-              }
-            ]
-          },
-          {
-            "id": 23,
-            "type": "MultipleChoiceQuestion",
-            "content": "Would you be interested in purchasing high-quality, brand-name products you are familiar with at prices that are the same or better than your current distributor's private label brand?",
-            "position": 4,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 24,
-            "prev_question_id": 21,
-            "question_options": [{
-                "id": 90,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Yes",
-                "name": "yes",
-                "position": 1
-              },
-              {
-                "id": 91,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No",
-                "name": "no",
-                "position": 2
-              },
-              {
-                "id": 92,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No Answer",
-                "name": "no_answer",
-                "position": 3
-              }
-            ]
-          },
-          {
-            "id": 24,
-            "type": "MultipleSelectQuestion",
-            "content": "Rank the following concerns that you have with your current distribution (scale of 1-10 with 1 meaning not a concern at all and 10 being a major concern).",
-            "position": 5,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 25,
-            "prev_question_id": 23,
-            "question_options": [{
-                "id": 93,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Pricing",
-                "name": "pricing",
-                "position": 1
-              },
-              {
-                "id": 94,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Product Availability/Backorders",
-                "name": "availability",
-                "position": 2
-              },
-              {
-                "id": 95,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Product Quality",
-                "name": "quality",
-                "position": 3
-              },
-              {
-                "id": 96,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Customer Service",
-                "name": "service",
-                "position": 4
-              },
-              {
-                "id": 97,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Accessibility/Availability of your account manager",
-                "name": "manager",
-                "position": 5
-              },
-              {
-                "id": 98,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Equipment repair and availability of loaner equipment",
-                "name": "equipment",
-                "position": 6
-              },
-              {
-                "id": 99,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Accounting (invoicing, statements, credits and returns)",
-                "name": "accounting",
-                "position": 7
-              },
-              {
-                "id": 100,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Ease of Ordering",
-                "name": "ordering",
-                "position": 8
-              },
-              {
-                "id": 101,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Pricing",
-                "name": "pricing",
-                "position": 9
-              }
-            ]
-          },
-          {
-            "id": 25,
-            "type": "MultipleSelectQuestion",
-            "content": "From which distributor are you currently buying medical supplies?",
-            "position": 6,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 26,
-            "prev_question_id": 24,
-            "question_options": [{
-                "id": 102,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "McKesson",
-                "name": "mckesson",
-                "position": 1
-              },
-              {
-                "id": 103,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Henry Schein",
-                "name": "henry_schein",
-                "position": 2
-              },
-              {
-                "id": 104,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Medline",
-                "name": "medline",
-                "position": 3
-              },
-              {
-                "id": 105,
-                "input": "text",
-                "data_type": "string",
-                "label": "Other",
-                "name": "other",
-                "position": 4
-              },
-              {
-                "id": 106,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No Answer",
-                "name": "no_answer",
-                "position": 5
-              }
-            ]
-          },
-          {
-            "id": 26,
-            "type": "FreeTextQuestion",
-            "content": "Is there anything else that I haven't covered that you feel is important when evaluating or selecting a supplier?",
-            "position": 7,
-            "required": false,
-            "has_questions": false,
-            "next_question_id": 27,
-            "prev_question_id": 25,
-            "question_options": [{
-              "id": 107,
-              "input": "textarea",
-              "data_type": "string",
-              "label": null,
-              "name": "evaluating_supplier",
-              "position": 1
-            }]
-          },
-          {
-            "id": 27,
-            "type": "FreeTextQuestion",
-            "content": "If you could change one thing about your current supplier what would it be and why?",
-            "position": 8,
-            "required": false,
-            "has_questions": false,
-            "next_question_id": null,
-            "prev_question_id": 26,
-            "question_options": [{
-              "id": 108,
-              "input": "textarea",
-              "data_type": "string",
-              "label": null,
-              "name": "change_supplier",
-              "position": 1
-            }]
-          }
-        ]
-      }
-    }
-  }
+{"id"=>125,
+ "salesperson_id"=>nil,
+ "marketer_id"=>346,
+ "customer_id"=>152,
+ "address_id"=>nil,
+ "first_name"=>"Saul",
+ "last_name"=>"Smith",
+ "business_name"=>nil,
+ "phone"=>"1234567890",
+ "email"=>nil,
+ "lead_status"=>"follow_up",
+ "questionnaire_status"=>"started",
+ "current_question"=>
+  {"id"=>3,
+   "questionnaire_id"=>1,
+   "content"=>
+    "Do you know if you are currently affiliated with any Group Purchasing Organization?",
+   "position"=>3,
+   "parent_question_id"=>nil,
+   "required"=>true,
+   "next_question_id"=>5,
+   "prev_question_id"=>2,
+   "created_at"=>"2018-07-30T12:46:46.626-04:00",
+   "updated_at"=>"2018-07-30T12:46:46.847-04:00",
+   "name"=>"gpo_affiliated"},
+ "questionnaire_answers"=>
+  [{"id"=>6,
+    "question_id"=>1,
+    "question_option_id"=>1,
+    "marketer_id"=>346,
+    "value"=>"true",
+    "created_at"=>"2018-07-31T15:50:48.675-04:00",
+    "updated_at"=>"2018-07-31T15:50:48.675-04:00",
+    "lead_id"=>125},
+   {"id"=>7,
+    "question_id"=>2,
+    "question_option_id"=>2,
+    "marketer_id"=>346,
+    "value"=>"true",
+    "created_at"=>"2018-07-31T15:59:00.069-04:00",
+    "updated_at"=>"2018-07-31T15:59:00.069-04:00",
+    "lead_id"=>125}],
+ "notes"=>nil,
+ "follow_up_date"=>nil,
+ "visit_date"=>nil,
+ "versions"=>
+  [{"id"=>362,
+    "item_type"=>"Lead",
+    "item_id"=>125,
+    "event"=>"update",
+    "whodunnit"=>nil,
+    "object"=>
+     "{\"id\":null,\"salesperson_id\":null,\"marketer_id\":null,\"customer_id\":null,\"address_id\":null,\"first_name\":null,\"last_name\":null,\"business_name\":null,\"phone\":null,\"email\":null,\"lead_status\":\"follow_up\",\"created_at\":null,\"updated_at\":null,\"follow_up_date\":null,\"notes\":null,\"visit_date\":null,\"questionnaire_id\":null,\"questionnaire_status\":\"unstarted\"}",
+    "created_at"=>"2018-07-31T15:47:21.494-04:00",
+    "object_changes"=>
+     "{\"id\":[null,125],\"first_name\":[null,\"John\"],\"last_name\":[null,\"Smith\"],\"phone\":[null,\"1234567890\"],\"created_at\":[null,\"2018-07-31T19:47:21.494Z\"],\"updated_at\":[null,\"2018-07-31T19:47:21.494Z\"],\"questionnaire_id\":[null,1]}"},
+   {"id"=>363,
+    "item_type"=>"Lead",
+    "item_id"=>125,
+    "event"=>"create",
+    "whodunnit"=>nil,
+    "object"=>nil,
+    "created_at"=>"2018-07-31T15:47:21.494-04:00",
+    "object_changes"=>nil},
+   {"id"=>364,
+    "item_type"=>"Lead",
+    "item_id"=>125,
+    "event"=>"update",
+    "whodunnit"=>nil,
+    "object"=>
+     "{\"id\":125,\"salesperson_id\":null,\"marketer_id\":null,\"customer_id\":null,\"address_id\":null,\"first_name\":\"John\",\"last_name\":\"Smith\",\"business_name\":null,\"phone\":\"1234567890\",\"email\":null,\"lead_status\":\"follow_up\",\"created_at\":\"2018-07-31T19:47:21.494Z\",\"updated_at\":\"2018-07-31T19:47:21.494Z\",\"follow_up_date\":null,\"notes\":null,\"visit_date\":null,\"questionnaire_id\":1,\"questionnaire_status\":\"unstarted\"}",
+    "created_at"=>"2018-07-31T15:54:26.932-04:00",
+    "object_changes"=>
+     "{\"first_name\":[\"John\",\"Saul\"],\"updated_at\":[\"2018-07-31T19:47:21.494Z\",\"2018-07-31T19:54:26.932Z\"]}"},
+   {"id"=>365,
+    "item_type"=>"Lead",
+    "item_id"=>125,
+    "event"=>"update",
+    "whodunnit"=>nil,
+    "object"=>
+     "{\"id\":125,\"salesperson_id\":null,\"marketer_id\":null,\"customer_id\":null,\"address_id\":null,\"first_name\":\"Saul\",\"last_name\":\"Smith\",\"business_name\":null,\"phone\":\"1234567890\",\"email\":null,\"lead_status\":\"follow_up\",\"created_at\":\"2018-07-31T19:47:21.494Z\",\"updated_at\":\"2018-07-31T19:54:26.932Z\",\"follow_up_date\":null,\"notes\":null,\"visit_date\":null,\"questionnaire_id\":1,\"questionnaire_status\":\"unstarted\"}",
+    "created_at"=>"2018-07-31T16:02:52.627-04:00",
+    "object_changes"=>
+     "{\"marketer_id\":[null,346],\"customer_id\":[null,152],\"updated_at\":[\"2018-07-31T19:54:26.932Z\",\"2018-07-31T20:02:52.627Z\"],\"questionnaire_status\":[\"unstarted\",\"started\"]}"}],
+ "created_at"=>"2018-07-31T15:47:21.494-04:00",
+ "updated_at"=>"2018-07-31T16:02:52.627-04:00",
+ "questionnaire"=>
+  {"id"=>1,
+   "name"=>"Health & Medical",
+   "questions"=>
+    [{"id"=>1,
+      "type"=>"MultipleChoiceQuestion",
+      "content"=>
+       "If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?",
+      "position"=>1,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>2,
+      "prev_question_id"=>nil,
+      "question_options"=>
+       [{"id"=>1,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Yes",
+         "name"=>"yes",
+         "position"=>1},
+        {"id"=>2,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No",
+         "name"=>"no",
+         "position"=>2}]},
+     {"id"=>2,
+      "type"=>"MultipleSelectQuestion",
+      "content"=>"How do you place orders?",
+      "position"=>2,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>3,
+      "prev_question_id"=>1,
+      "question_options"=>
+       [{"id"=>3,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Online",
+         "name"=>"online",
+         "position"=>1},
+        {"id"=>4,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Phone",
+         "name"=>"phone",
+         "position"=>2},
+        {"id"=>5,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Fax",
+         "name"=>"fax",
+         "position"=>3},
+        {"id"=>6,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"E-mail",
+         "name"=>"email",
+         "position"=>4},
+        {"id"=>7,
+         "input"=>"text",
+         "data_type"=>"string",
+         "label"=>"Other",
+         "name"=>"other",
+         "position"=>5},
+        {"id"=>8,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>6}]},
+     {"id"=>3,
+      "type"=>"MultipleChoiceQuestion",
+      "content"=>
+       "Do you know if you are currently affiliated with any Group Purchasing Organization?",
+      "position"=>3,
+      "required"=>true,
+      "has_questions"=>true,
+      "next_question_id"=>5,
+      "prev_question_id"=>2,
+      "questions"=>
+       [{"id"=>4,
+         "type"=>"MultipleSelectQuestion",
+         "content"=>"With which GPO are you affiliated?",
+         "position"=>1,
+         "required"=>true,
+         "has_questions"=>false,
+         "next_question_id"=>nil,
+         "prev_question_id"=>nil,
+         "question_options"=>
+          [{"id"=>12,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"Premier",
+            "name"=>"premier",
+            "position"=>1},
+           {"id"=>13,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"HPG",
+            "name"=>"hpg",
+            "position"=>2},
+           {"id"=>14,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"Vizient",
+            "name"=>"vizient",
+            "position"=>3},
+           {"id"=>15,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"Intalare",
+            "name"=>"intalare",
+            "position"=>4},
+           {"id"=>16,
+            "input"=>"text",
+            "data_type"=>"string",
+            "label"=>"Other",
+            "name"=>"other",
+            "position"=>5},
+           {"id"=>17,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"No Answer",
+            "name"=>"no_answer",
+            "position"=>6}]}],
+      "question_options"=>
+       [{"id"=>9,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Yes",
+         "name"=>"yes",
+         "position"=>1},
+        {"id"=>10,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No",
+         "name"=>"no",
+         "position"=>2},
+        {"id"=>11,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>3}]},
+     {"id"=>5,
+      "type"=>"MultipleChoiceQuestion",
+      "content"=>
+       "Would you be interested in purchasing high-quality, brand-name products you are familiar with at prices that are the same or better than your current distributor's private label brand?",
+      "position"=>4,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>6,
+      "prev_question_id"=>3,
+      "question_options"=>
+       [{"id"=>18,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Yes",
+         "name"=>"yes",
+         "position"=>1},
+        {"id"=>19,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No",
+         "name"=>"no",
+         "position"=>2},
+        {"id"=>20,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>3}]},
+     {"id"=>6,
+      "type"=>"MultipleSelectQuestion",
+      "content"=>
+       "Rank the following concerns that you have with your current distribution (scale of 1-10 with 1 meaning not a concern at all and 10 being a major concern).",
+      "position"=>5,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>7,
+      "prev_question_id"=>5,
+      "question_options"=>
+       [{"id"=>21,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Pricing",
+         "name"=>"pricing",
+         "position"=>1},
+        {"id"=>22,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Product Availability/Backorders",
+         "name"=>"availability",
+         "position"=>2},
+        {"id"=>23,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Product Quality",
+         "name"=>"quality",
+         "position"=>3},
+        {"id"=>24,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Delivery",
+         "name"=>"delivery",
+         "position"=>4},
+        {"id"=>25,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Customer Service",
+         "name"=>"service",
+         "position"=>5},
+        {"id"=>26,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>
+          "Accessibility/Availability of your account manager",
+         "name"=>"manager",
+         "position"=>6},
+        {"id"=>27,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>
+          "Equipment repair and availability of loaner equipment",
+         "name"=>"equipment",
+         "position"=>7},
+        {"id"=>28,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>
+          "Accounting (invoicing, statements, credits and returns)",
+         "name"=>"accounting",
+         "position"=>8},
+        {"id"=>29,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Ease of Ordering",
+         "name"=>"ordering",
+         "position"=>9}]},
+     {"id"=>7,
+      "type"=>"MultipleSelectQuestion",
+      "content"=>
+       "From which distributor are you currently buying medical supplies?",
+      "position"=>6,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>8,
+      "prev_question_id"=>6,
+      "question_options"=>
+       [{"id"=>30,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"McKesson",
+         "name"=>"mckesson",
+         "position"=>1},
+        {"id"=>31,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Henry Schein",
+         "name"=>"henry_schein",
+         "position"=>2},
+        {"id"=>32,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Medline",
+         "name"=>"medline",
+         "position"=>3},
+        {"id"=>33,
+         "input"=>"text",
+         "data_type"=>"string",
+         "label"=>"Other",
+         "name"=>"other",
+         "position"=>4},
+        {"id"=>34,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>5}]},
+     {"id"=>8,
+      "type"=>"FreeTextQuestion",
+      "content"=>
+       "Is there anything else that I haven't covered that you feel is important when evaluating or selecting a supplier?",
+      "position"=>7,
+      "required"=>false,
+      "has_questions"=>false,
+      "next_question_id"=>9,
+      "prev_question_id"=>7,
+      "question_options"=>
+       [{"id"=>35,
+         "input"=>"textarea",
+         "data_type"=>"string",
+         "label"=>nil,
+         "name"=>"evaluating_supplier",
+         "position"=>1}]},
+     {"id"=>9,
+      "type"=>"FreeTextQuestion",
+      "content"=>
+       "If you could change one thing about your current supplier what would it be and why?",
+      "position"=>8,
+      "required"=>false,
+      "has_questions"=>false,
+      "next_question_id"=>nil,
+      "prev_question_id"=>8,
+      "question_options"=>
+       [{"id"=>36,
+         "input"=>"textarea",
+         "data_type"=>"string",
+         "label"=>nil,
+         "name"=>"change_supplier",
+         "position"=>1}]}]}}
 ```
 
 ## Create Lead
@@ -880,445 +821,404 @@ notes | optional | Marketer's lead notes
 > The response looks like this:
 
 ```shell
-{
-  "customer": {
-    "id": 1,
-    "categories": [{
-      "title": "Bars",
-      "alias": "bars"
-    }],
-    "coordinates": {
-      "latitude": 40.7143528,
-      "longitude": -74.0059731
-    },
-    "name": "Mourad Restaurant",
-    "phone": "+14156602500",
-    "display_phone": "+14156602500",
-    "photos": ["https://s3-media2.fl.yelpcdn.com/bphoto/wlbRTdS4LXvR1vR4sVwirA/o.jpg", "https://s3-media4.fl.yelpcdn.com/bphoto/ULuBpYRQcRHpNOWGgfNaQA/o.jpg", "https://s3-media2.fl.yelpcdn.com/bphoto/aagkD5lUHBxvZ9-9JJ-AeQ/o.jpg"],
-    "url": "https://www.yelp.com/biz/mourad-restaurant-san-francisco?adjust_creative=jMxsvyOFUo07wr15E7Y1Egu0026utm_campaign=yelp_api_v3u0026utm_medium=api_v3_business_lookupu0026utm_source=jMxsvyOFUo07wr15E7Y1Eg",
-    "hours": [{
-      "open": [{
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 0
-      }, {
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 1
-      }, {
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 2
-      }, {
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 3
-      }, {
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 4
-      }, {
-        "is_overnight": false,
-        "start": "1700",
-        "end": "2200",
-        "day": 5
-      }, {
-        "is_overnight": false,
-        "start": "1700",
-        "end": "2200",
-        "day": 6
-      }],
-      "hours_type": "REGULAR",
-      "is_open_now": false
-    }],
-    "yelp_id": "mourad-restaurant-san-francisco",
-    "location": {
-      "display_address": ["2224 South Colorado Street", "Philadelphia, PA 19145"],
-      "address1": "2224 South Colorado Street",
-      "city": "Philadelphia",
-      "state": "PA",
-      "country": "US",
-      "zip_code": "19145"
-    },
-    "lead": {
-      "id": 1,
-      "salesperson_id": 2,
-      "marketer_id": 3,
-      "customer_id": 4,
-      "address_id": 5,
-      "first_name": "John",
-      "last_name": "Doe",
-      "business_name": "Mourad Restaurant",
-      "phone": "123 456 7890",
-      "email": "owner@mourad.com",
-      "lead_status": "follow_up",
-      "questionnaire_status": "unstarted",
-      "questionnaire_answers": [
-        {
-          "id": 15,
-          "question_id": 1,
-          "question_option_id": 4,
-          "value": '6'
-        },
-        {
-          "id": 16,
-          "question_id": 1,
-          "question_option_id": 6,
-          "value": '2'
-        }
-      ],
-      "notes": "Will call back when owner is available",
-      "follow_up_date": "2018-08-16 12:40:25 -0400",
-      "visit_date": "2018-07-16 12:40:25 -0400",
-      "created_at": "2018-07-16 12:40:25 -0400",
-      "questionnaire": {
-        "id": 3,
-        "name": "Health & Medical",
-        "questions": [{
-            "id": 19,
-            "type": "MultipleChoiceQuestion",
-            "content": "If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?",
-            "position": 1,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 20,
-            "prev_question_id": null,
-            "question_options": [{
-                "id": 73,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Yes",
-                "name": "yes",
-                "position": 1
-              },
-              {
-                "id": 74,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No",
-                "name": "no",
-                "position": 2
-              }
-            ]
-          },
-          {
-            "id": 20,
-            "type": "MultipleSelectQuestion",
-            "content": "How do you place orders?",
-            "position": 2,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 21,
-            "prev_question_id": 19,
-            "question_options": [{
-                "id": 75,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Online",
-                "name": "online",
-                "position": 1
-              },
-              {
-                "id": 76,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Phone",
-                "name": "phone",
-                "position": 2
-              },
-              {
-                "id": 77,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Fax",
-                "name": "fax",
-                "position": 3
-              },
-              {
-                "id": 78,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "E-mail",
-                "name": "email",
-                "position": 4
-              },
-              {
-                "id": 79,
-                "input": "text",
-                "data_type": "string",
-                "label": "Other",
-                "name": "other",
-                "position": 5
-              },
-              {
-                "id": 80,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No Answer",
-                "name": "no_answer",
-                "position": 6
-              }
-            ]
-          },
-          {
-            "id": 21,
-            "type": "MultipleChoiceQuestion",
-            "content": "Do you know if you are currently affiliated with any Group Purchasing Organization?",
-            "position": 3,
-            "required": true,
-            "has_questions": true,
-            "next_question_id": 23,
-            "prev_question_id": 20,
-            "questions": [{
-              "id": 22,
-              "type": "MultipleSelectQuestion",
-              "content": "With which GPO are you affiliated?",
-              "position": 1,
-              "required": true,
-              "has_questions": false,
-              "next_question_id": null,
-              "prev_question_id": null
-            }],
-            "question_options": [{
-                "id": 81,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Yes",
-                "name": "yes",
-                "position": 1
-              },
-              {
-                "id": 82,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No",
-                "name": "no",
-                "position": 2
-              },
-              {
-                "id": 83,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No Answer",
-                "name": "no_answer",
-                "position": 3
-              }
-            ]
-          },
-          {
-            "id": 23,
-            "type": "MultipleChoiceQuestion",
-            "content": "Would you be interested in purchasing high-quality, brand-name products you are familiar with at prices that are the same or better than your current distributor's private label brand?",
-            "position": 4,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 24,
-            "prev_question_id": 21,
-            "question_options": [{
-                "id": 90,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Yes",
-                "name": "yes",
-                "position": 1
-              },
-              {
-                "id": 91,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No",
-                "name": "no",
-                "position": 2
-              },
-              {
-                "id": 92,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No Answer",
-                "name": "no_answer",
-                "position": 3
-              }
-            ]
-          },
-          {
-            "id": 24,
-            "type": "MultipleSelectQuestion",
-            "content": "Rank the following concerns that you have with your current distribution (scale of 1-10 with 1 meaning not a concern at all and 10 being a major concern).",
-            "position": 5,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 25,
-            "prev_question_id": 23,
-            "question_options": [{
-                "id": 93,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Pricing",
-                "name": "pricing",
-                "position": 1
-              },
-              {
-                "id": 94,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Product Availability/Backorders",
-                "name": "availability",
-                "position": 2
-              },
-              {
-                "id": 95,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Product Quality",
-                "name": "quality",
-                "position": 3
-              },
-              {
-                "id": 96,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Customer Service",
-                "name": "service",
-                "position": 4
-              },
-              {
-                "id": 97,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Accessibility/Availability of your account manager",
-                "name": "manager",
-                "position": 5
-              },
-              {
-                "id": 98,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Equipment repair and availability of loaner equipment",
-                "name": "equipment",
-                "position": 6
-              },
-              {
-                "id": 99,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Accounting (invoicing, statements, credits and returns)",
-                "name": "accounting",
-                "position": 7
-              },
-              {
-                "id": 100,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Ease of Ordering",
-                "name": "ordering",
-                "position": 8
-              },
-              {
-                "id": 101,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Pricing",
-                "name": "pricing",
-                "position": 9
-              }
-            ]
-          },
-          {
-            "id": 25,
-            "type": "MultipleSelectQuestion",
-            "content": "From which distributor are you currently buying medical supplies?",
-            "position": 6,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 26,
-            "prev_question_id": 24,
-            "question_options": [{
-                "id": 102,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "McKesson",
-                "name": "mckesson",
-                "position": 1
-              },
-              {
-                "id": 103,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Henry Schein",
-                "name": "henry_schein",
-                "position": 2
-              },
-              {
-                "id": 104,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Medline",
-                "name": "medline",
-                "position": 3
-              },
-              {
-                "id": 105,
-                "input": "text",
-                "data_type": "string",
-                "label": "Other",
-                "name": "other",
-                "position": 4
-              },
-              {
-                "id": 106,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No Answer",
-                "name": "no_answer",
-                "position": 5
-              }
-            ]
-          },
-          {
-            "id": 26,
-            "type": "FreeTextQuestion",
-            "content": "Is there anything else that I haven't covered that you feel is important when evaluating or selecting a supplier?",
-            "position": 7,
-            "required": false,
-            "has_questions": false,
-            "next_question_id": 27,
-            "prev_question_id": 25,
-            "question_options": [{
-              "id": 107,
-              "input": "textarea",
-              "data_type": "string",
-              "label": null,
-              "name": "evaluating_supplier",
-              "position": 1
-            }]
-          },
-          {
-            "id": 27,
-            "type": "FreeTextQuestion",
-            "content": "If you could change one thing about your current supplier what would it be and why?",
-            "position": 8,
-            "required": false,
-            "has_questions": false,
-            "next_question_id": null,
-            "prev_question_id": 26,
-            "question_options": [{
-              "id": 108,
-              "input": "textarea",
-              "data_type": "string",
-              "label": null,
-              "name": "change_supplier",
-              "position": 1
-            }]
-          }
-        ]
-      }
-    }
-  }
+{"id"=>125,
+ "salesperson_id"=>nil,
+ "marketer_id"=>346,
+ "customer_id"=>152,
+ "address_id"=>nil,
+ "first_name"=>"Saul",
+ "last_name"=>"Smith",
+ "business_name"=>nil,
+ "phone"=>"1234567890",
+ "email"=>nil,
+ "lead_status"=>"follow_up",
+ "questionnaire_status"=>"started",
+ "current_question"=>
+  {"id"=>3,
+   "questionnaire_id"=>1,
+   "content"=>
+    "Do you know if you are currently affiliated with any Group Purchasing Organization?",
+   "position"=>3,
+   "parent_question_id"=>nil,
+   "required"=>true,
+   "next_question_id"=>5,
+   "prev_question_id"=>2,
+   "created_at"=>"2018-07-30T12:46:46.626-04:00",
+   "updated_at"=>"2018-07-30T12:46:46.847-04:00",
+   "name"=>"gpo_affiliated"},
+ "questionnaire_answers"=>
+  [{"id"=>6,
+    "question_id"=>1,
+    "question_option_id"=>1,
+    "marketer_id"=>346,
+    "value"=>"true",
+    "created_at"=>"2018-07-31T15:50:48.675-04:00",
+    "updated_at"=>"2018-07-31T15:50:48.675-04:00",
+    "lead_id"=>125},
+   {"id"=>7,
+    "question_id"=>2,
+    "question_option_id"=>2,
+    "marketer_id"=>346,
+    "value"=>"true",
+    "created_at"=>"2018-07-31T15:59:00.069-04:00",
+    "updated_at"=>"2018-07-31T15:59:00.069-04:00",
+    "lead_id"=>125}],
+ "notes"=>nil,
+ "follow_up_date"=>nil,
+ "visit_date"=>nil,
+ "versions"=>
+  [{"id"=>362,
+    "item_type"=>"Lead",
+    "item_id"=>125,
+    "event"=>"update",
+    "whodunnit"=>nil,
+    "object"=>
+     "{\"id\":null,\"salesperson_id\":null,\"marketer_id\":null,\"customer_id\":null,\"address_id\":null,\"first_name\":null,\"last_name\":null,\"business_name\":null,\"phone\":null,\"email\":null,\"lead_status\":\"follow_up\",\"created_at\":null,\"updated_at\":null,\"follow_up_date\":null,\"notes\":null,\"visit_date\":null,\"questionnaire_id\":null,\"questionnaire_status\":\"unstarted\"}",
+    "created_at"=>"2018-07-31T15:47:21.494-04:00",
+    "object_changes"=>
+     "{\"id\":[null,125],\"first_name\":[null,\"John\"],\"last_name\":[null,\"Smith\"],\"phone\":[null,\"1234567890\"],\"created_at\":[null,\"2018-07-31T19:47:21.494Z\"],\"updated_at\":[null,\"2018-07-31T19:47:21.494Z\"],\"questionnaire_id\":[null,1]}"},
+   {"id"=>363,
+    "item_type"=>"Lead",
+    "item_id"=>125,
+    "event"=>"create",
+    "whodunnit"=>nil,
+    "object"=>nil,
+    "created_at"=>"2018-07-31T15:47:21.494-04:00",
+    "object_changes"=>nil},
+   {"id"=>364,
+    "item_type"=>"Lead",
+    "item_id"=>125,
+    "event"=>"update",
+    "whodunnit"=>nil,
+    "object"=>
+     "{\"id\":125,\"salesperson_id\":null,\"marketer_id\":null,\"customer_id\":null,\"address_id\":null,\"first_name\":\"John\",\"last_name\":\"Smith\",\"business_name\":null,\"phone\":\"1234567890\",\"email\":null,\"lead_status\":\"follow_up\",\"created_at\":\"2018-07-31T19:47:21.494Z\",\"updated_at\":\"2018-07-31T19:47:21.494Z\",\"follow_up_date\":null,\"notes\":null,\"visit_date\":null,\"questionnaire_id\":1,\"questionnaire_status\":\"unstarted\"}",
+    "created_at"=>"2018-07-31T15:54:26.932-04:00",
+    "object_changes"=>
+     "{\"first_name\":[\"John\",\"Saul\"],\"updated_at\":[\"2018-07-31T19:47:21.494Z\",\"2018-07-31T19:54:26.932Z\"]}"},
+   {"id"=>365,
+    "item_type"=>"Lead",
+    "item_id"=>125,
+    "event"=>"update",
+    "whodunnit"=>nil,
+    "object"=>
+     "{\"id\":125,\"salesperson_id\":null,\"marketer_id\":null,\"customer_id\":null,\"address_id\":null,\"first_name\":\"Saul\",\"last_name\":\"Smith\",\"business_name\":null,\"phone\":\"1234567890\",\"email\":null,\"lead_status\":\"follow_up\",\"created_at\":\"2018-07-31T19:47:21.494Z\",\"updated_at\":\"2018-07-31T19:54:26.932Z\",\"follow_up_date\":null,\"notes\":null,\"visit_date\":null,\"questionnaire_id\":1,\"questionnaire_status\":\"unstarted\"}",
+    "created_at"=>"2018-07-31T16:02:52.627-04:00",
+    "object_changes"=>
+     "{\"marketer_id\":[null,346],\"customer_id\":[null,152],\"updated_at\":[\"2018-07-31T19:54:26.932Z\",\"2018-07-31T20:02:52.627Z\"],\"questionnaire_status\":[\"unstarted\",\"started\"]}"}],
+ "created_at"=>"2018-07-31T15:47:21.494-04:00",
+ "updated_at"=>"2018-07-31T16:02:52.627-04:00",
+ "questionnaire"=>
+  {"id"=>1,
+   "name"=>"Health & Medical",
+   "questions"=>
+    [{"id"=>1,
+      "type"=>"MultipleChoiceQuestion",
+      "content"=>
+       "If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?",
+      "position"=>1,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>2,
+      "prev_question_id"=>nil,
+      "question_options"=>
+       [{"id"=>1,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Yes",
+         "name"=>"yes",
+         "position"=>1},
+        {"id"=>2,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No",
+         "name"=>"no",
+         "position"=>2}]},
+     {"id"=>2,
+      "type"=>"MultipleSelectQuestion",
+      "content"=>"How do you place orders?",
+      "position"=>2,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>3,
+      "prev_question_id"=>1,
+      "question_options"=>
+       [{"id"=>3,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Online",
+         "name"=>"online",
+         "position"=>1},
+        {"id"=>4,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Phone",
+         "name"=>"phone",
+         "position"=>2},
+        {"id"=>5,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Fax",
+         "name"=>"fax",
+         "position"=>3},
+        {"id"=>6,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"E-mail",
+         "name"=>"email",
+         "position"=>4},
+        {"id"=>7,
+         "input"=>"text",
+         "data_type"=>"string",
+         "label"=>"Other",
+         "name"=>"other",
+         "position"=>5},
+        {"id"=>8,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>6}]},
+     {"id"=>3,
+      "type"=>"MultipleChoiceQuestion",
+      "content"=>
+       "Do you know if you are currently affiliated with any Group Purchasing Organization?",
+      "position"=>3,
+      "required"=>true,
+      "has_questions"=>true,
+      "next_question_id"=>5,
+      "prev_question_id"=>2,
+      "questions"=>
+       [{"id"=>4,
+         "type"=>"MultipleSelectQuestion",
+         "content"=>"With which GPO are you affiliated?",
+         "position"=>1,
+         "required"=>true,
+         "has_questions"=>false,
+         "next_question_id"=>nil,
+         "prev_question_id"=>nil,
+         "question_options"=>
+          [{"id"=>12,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"Premier",
+            "name"=>"premier",
+            "position"=>1},
+           {"id"=>13,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"HPG",
+            "name"=>"hpg",
+            "position"=>2},
+           {"id"=>14,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"Vizient",
+            "name"=>"vizient",
+            "position"=>3},
+           {"id"=>15,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"Intalare",
+            "name"=>"intalare",
+            "position"=>4},
+           {"id"=>16,
+            "input"=>"text",
+            "data_type"=>"string",
+            "label"=>"Other",
+            "name"=>"other",
+            "position"=>5},
+           {"id"=>17,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"No Answer",
+            "name"=>"no_answer",
+            "position"=>6}]}],
+      "question_options"=>
+       [{"id"=>9,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Yes",
+         "name"=>"yes",
+         "position"=>1},
+        {"id"=>10,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No",
+         "name"=>"no",
+         "position"=>2},
+        {"id"=>11,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>3}]},
+     {"id"=>5,
+      "type"=>"MultipleChoiceQuestion",
+      "content"=>
+       "Would you be interested in purchasing high-quality, brand-name products you are familiar with at prices that are the same or better than your current distributor's private label brand?",
+      "position"=>4,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>6,
+      "prev_question_id"=>3,
+      "question_options"=>
+       [{"id"=>18,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Yes",
+         "name"=>"yes",
+         "position"=>1},
+        {"id"=>19,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No",
+         "name"=>"no",
+         "position"=>2},
+        {"id"=>20,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>3}]},
+     {"id"=>6,
+      "type"=>"MultipleSelectQuestion",
+      "content"=>
+       "Rank the following concerns that you have with your current distribution (scale of 1-10 with 1 meaning not a concern at all and 10 being a major concern).",
+      "position"=>5,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>7,
+      "prev_question_id"=>5,
+      "question_options"=>
+       [{"id"=>21,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Pricing",
+         "name"=>"pricing",
+         "position"=>1},
+        {"id"=>22,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Product Availability/Backorders",
+         "name"=>"availability",
+         "position"=>2},
+        {"id"=>23,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Product Quality",
+         "name"=>"quality",
+         "position"=>3},
+        {"id"=>24,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Delivery",
+         "name"=>"delivery",
+         "position"=>4},
+        {"id"=>25,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Customer Service",
+         "name"=>"service",
+         "position"=>5},
+        {"id"=>26,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>
+          "Accessibility/Availability of your account manager",
+         "name"=>"manager",
+         "position"=>6},
+        {"id"=>27,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>
+          "Equipment repair and availability of loaner equipment",
+         "name"=>"equipment",
+         "position"=>7},
+        {"id"=>28,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>
+          "Accounting (invoicing, statements, credits and returns)",
+         "name"=>"accounting",
+         "position"=>8},
+        {"id"=>29,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Ease of Ordering",
+         "name"=>"ordering",
+         "position"=>9}]},
+     {"id"=>7,
+      "type"=>"MultipleSelectQuestion",
+      "content"=>
+       "From which distributor are you currently buying medical supplies?",
+      "position"=>6,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>8,
+      "prev_question_id"=>6,
+      "question_options"=>
+       [{"id"=>30,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"McKesson",
+         "name"=>"mckesson",
+         "position"=>1},
+        {"id"=>31,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Henry Schein",
+         "name"=>"henry_schein",
+         "position"=>2},
+        {"id"=>32,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Medline",
+         "name"=>"medline",
+         "position"=>3},
+        {"id"=>33,
+         "input"=>"text",
+         "data_type"=>"string",
+         "label"=>"Other",
+         "name"=>"other",
+         "position"=>4},
+        {"id"=>34,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>5}]},
+     {"id"=>8,
+      "type"=>"FreeTextQuestion",
+      "content"=>
+       "Is there anything else that I haven't covered that you feel is important when evaluating or selecting a supplier?",
+      "position"=>7,
+      "required"=>false,
+      "has_questions"=>false,
+      "next_question_id"=>9,
+      "prev_question_id"=>7,
+      "question_options"=>
+       [{"id"=>35,
+         "input"=>"textarea",
+         "data_type"=>"string",
+         "label"=>nil,
+         "name"=>"evaluating_supplier",
+         "position"=>1}]},
+     {"id"=>9,
+      "type"=>"FreeTextQuestion",
+      "content"=>
+       "If you could change one thing about your current supplier what would it be and why?",
+      "position"=>8,
+      "required"=>false,
+      "has_questions"=>false,
+      "next_question_id"=>nil,
+      "prev_question_id"=>8,
+      "question_options"=>
+       [{"id"=>36,
+         "input"=>"textarea",
+         "data_type"=>"string",
+         "label"=>nil,
+         "name"=>"change_supplier",
+         "position"=>1}]}]}}
 ```
 
 ## Update Lead
@@ -1342,445 +1242,404 @@ notes | optional | Marketer's lead notes
 > The response looks like this:
 
 ```shell
-{
-  "customer": {
-    "id": 1,
-    "categories": [{
-      "title": "Bars",
-      "alias": "bars"
-    }],
-    "coordinates": {
-      "latitude": 40.7143528,
-      "longitude": -74.0059731
-    },
-    "name": "Mourad Restaurant",
-    "phone": "+14156602500",
-    "display_phone": "+14156602500",
-    "photos": ["https://s3-media2.fl.yelpcdn.com/bphoto/wlbRTdS4LXvR1vR4sVwirA/o.jpg", "https://s3-media4.fl.yelpcdn.com/bphoto/ULuBpYRQcRHpNOWGgfNaQA/o.jpg", "https://s3-media2.fl.yelpcdn.com/bphoto/aagkD5lUHBxvZ9-9JJ-AeQ/o.jpg"],
-    "url": "https://www.yelp.com/biz/mourad-restaurant-san-francisco?adjust_creative=jMxsvyOFUo07wr15E7Y1Egu0026utm_campaign=yelp_api_v3u0026utm_medium=api_v3_business_lookupu0026utm_source=jMxsvyOFUo07wr15E7Y1Eg",
-    "hours": [{
-      "open": [{
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 0
-      }, {
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 1
-      }, {
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 2
-      }, {
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 3
-      }, {
-        "is_overnight": false,
-        "start": "1130",
-        "end": "2200",
-        "day": 4
-      }, {
-        "is_overnight": false,
-        "start": "1700",
-        "end": "2200",
-        "day": 5
-      }, {
-        "is_overnight": false,
-        "start": "1700",
-        "end": "2200",
-        "day": 6
-      }],
-      "hours_type": "REGULAR",
-      "is_open_now": false
-    }],
-    "yelp_id": "mourad-restaurant-san-francisco",
-    "location": {
-      "display_address": ["2224 South Colorado Street", "Philadelphia, PA 19145"],
-      "address1": "2224 South Colorado Street",
-      "city": "Philadelphia",
-      "state": "PA",
-      "country": "US",
-      "zip_code": "19145"
-    },
-    "lead": {
-      "id": 1,
-      "salesperson_id": 2,
-      "marketer_id": 3,
-      "customer_id": 4,
-      "address_id": 5,
-      "first_name": "John",
-      "last_name": "Doe",
-      "business_name": "Mourad Restaurant",
-      "phone": "123 456 7890",
-      "email": "owner@mourad.com",
-      "lead_status": "follow_up",
-      "questionnaire_status": "unstarted",
-      "questionnaire_answers": [
-        {
-          "id": 15,
-          "question_id": 1,
-          "question_option_id": 4,
-          "value": '6'
-        },
-        {
-          "id": 16,
-          "question_id": 1,
-          "question_option_id": 6,
-          "value": '2'
-        }
-      ],
-      "notes": "Will call back when owner is available",
-      "follow_up_date": "2018-08-16 12:40:25 -0400",
-      "visit_date": "2018-07-16 12:40:25 -0400",
-      "created_at": "2018-07-16 12:40:25 -0400",
-      "questionnaire": {
-        "id": 3,
-        "name": "Health & Medical",
-        "questions": [{
-            "id": 19,
-            "type": "MultipleChoiceQuestion",
-            "content": "If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?",
-            "position": 1,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 20,
-            "prev_question_id": null,
-            "question_options": [{
-                "id": 73,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Yes",
-                "name": "yes",
-                "position": 1
-              },
-              {
-                "id": 74,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No",
-                "name": "no",
-                "position": 2
-              }
-            ]
-          },
-          {
-            "id": 20,
-            "type": "MultipleSelectQuestion",
-            "content": "How do you place orders?",
-            "position": 2,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 21,
-            "prev_question_id": 19,
-            "question_options": [{
-                "id": 75,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Online",
-                "name": "online",
-                "position": 1
-              },
-              {
-                "id": 76,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Phone",
-                "name": "phone",
-                "position": 2
-              },
-              {
-                "id": 77,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Fax",
-                "name": "fax",
-                "position": 3
-              },
-              {
-                "id": 78,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "E-mail",
-                "name": "email",
-                "position": 4
-              },
-              {
-                "id": 79,
-                "input": "text",
-                "data_type": "string",
-                "label": "Other",
-                "name": "other",
-                "position": 5
-              },
-              {
-                "id": 80,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No Answer",
-                "name": "no_answer",
-                "position": 6
-              }
-            ]
-          },
-          {
-            "id": 21,
-            "type": "MultipleChoiceQuestion",
-            "content": "Do you know if you are currently affiliated with any Group Purchasing Organization?",
-            "position": 3,
-            "required": true,
-            "has_questions": true,
-            "next_question_id": 23,
-            "prev_question_id": 20,
-            "questions": [{
-              "id": 22,
-              "type": "MultipleSelectQuestion",
-              "content": "With which GPO are you affiliated?",
-              "position": 1,
-              "required": true,
-              "has_questions": false,
-              "next_question_id": null,
-              "prev_question_id": null
-            }],
-            "question_options": [{
-                "id": 81,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Yes",
-                "name": "yes",
-                "position": 1
-              },
-              {
-                "id": 82,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No",
-                "name": "no",
-                "position": 2
-              },
-              {
-                "id": 83,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No Answer",
-                "name": "no_answer",
-                "position": 3
-              }
-            ]
-          },
-          {
-            "id": 23,
-            "type": "MultipleChoiceQuestion",
-            "content": "Would you be interested in purchasing high-quality, brand-name products you are familiar with at prices that are the same or better than your current distributor's private label brand?",
-            "position": 4,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 24,
-            "prev_question_id": 21,
-            "question_options": [{
-                "id": 90,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Yes",
-                "name": "yes",
-                "position": 1
-              },
-              {
-                "id": 91,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No",
-                "name": "no",
-                "position": 2
-              },
-              {
-                "id": 92,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No Answer",
-                "name": "no_answer",
-                "position": 3
-              }
-            ]
-          },
-          {
-            "id": 24,
-            "type": "MultipleSelectQuestion",
-            "content": "Rank the following concerns that you have with your current distribution (scale of 1-10 with 1 meaning not a concern at all and 10 being a major concern).",
-            "position": 5,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 25,
-            "prev_question_id": 23,
-            "question_options": [{
-                "id": 93,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Pricing",
-                "name": "pricing",
-                "position": 1
-              },
-              {
-                "id": 94,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Product Availability/Backorders",
-                "name": "availability",
-                "position": 2
-              },
-              {
-                "id": 95,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Product Quality",
-                "name": "quality",
-                "position": 3
-              },
-              {
-                "id": 96,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Customer Service",
-                "name": "service",
-                "position": 4
-              },
-              {
-                "id": 97,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Accessibility/Availability of your account manager",
-                "name": "manager",
-                "position": 5
-              },
-              {
-                "id": 98,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Equipment repair and availability of loaner equipment",
-                "name": "equipment",
-                "position": 6
-              },
-              {
-                "id": 99,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Accounting (invoicing, statements, credits and returns)",
-                "name": "accounting",
-                "position": 7
-              },
-              {
-                "id": 100,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Ease of Ordering",
-                "name": "ordering",
-                "position": 8
-              },
-              {
-                "id": 101,
-                "input": "range",
-                "data_type": "integer",
-                "label": "Pricing",
-                "name": "pricing",
-                "position": 9
-              }
-            ]
-          },
-          {
-            "id": 25,
-            "type": "MultipleSelectQuestion",
-            "content": "From which distributor are you currently buying medical supplies?",
-            "position": 6,
-            "required": true,
-            "has_questions": false,
-            "next_question_id": 26,
-            "prev_question_id": 24,
-            "question_options": [{
-                "id": 102,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "McKesson",
-                "name": "mckesson",
-                "position": 1
-              },
-              {
-                "id": 103,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Henry Schein",
-                "name": "henry_schein",
-                "position": 2
-              },
-              {
-                "id": 104,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "Medline",
-                "name": "medline",
-                "position": 3
-              },
-              {
-                "id": 105,
-                "input": "text",
-                "data_type": "string",
-                "label": "Other",
-                "name": "other",
-                "position": 4
-              },
-              {
-                "id": 106,
-                "input": "radio",
-                "data_type": "boolean",
-                "label": "No Answer",
-                "name": "no_answer",
-                "position": 5
-              }
-            ]
-          },
-          {
-            "id": 26,
-            "type": "FreeTextQuestion",
-            "content": "Is there anything else that I haven't covered that you feel is important when evaluating or selecting a supplier?",
-            "position": 7,
-            "required": false,
-            "has_questions": false,
-            "next_question_id": 27,
-            "prev_question_id": 25,
-            "question_options": [{
-              "id": 107,
-              "input": "textarea",
-              "data_type": "string",
-              "label": null,
-              "name": "evaluating_supplier",
-              "position": 1
-            }]
-          },
-          {
-            "id": 27,
-            "type": "FreeTextQuestion",
-            "content": "If you could change one thing about your current supplier what would it be and why?",
-            "position": 8,
-            "required": false,
-            "has_questions": false,
-            "next_question_id": null,
-            "prev_question_id": 26,
-            "question_options": [{
-              "id": 108,
-              "input": "textarea",
-              "data_type": "string",
-              "label": null,
-              "name": "change_supplier",
-              "position": 1
-            }]
-          }
-        ]
-      }
-    }
-  }
+{"id"=>125,
+ "salesperson_id"=>nil,
+ "marketer_id"=>346,
+ "customer_id"=>152,
+ "address_id"=>nil,
+ "first_name"=>"Saul",
+ "last_name"=>"Smith",
+ "business_name"=>nil,
+ "phone"=>"1234567890",
+ "email"=>nil,
+ "lead_status"=>"follow_up",
+ "questionnaire_status"=>"started",
+ "current_question"=>
+  {"id"=>3,
+   "questionnaire_id"=>1,
+   "content"=>
+    "Do you know if you are currently affiliated with any Group Purchasing Organization?",
+   "position"=>3,
+   "parent_question_id"=>nil,
+   "required"=>true,
+   "next_question_id"=>5,
+   "prev_question_id"=>2,
+   "created_at"=>"2018-07-30T12:46:46.626-04:00",
+   "updated_at"=>"2018-07-30T12:46:46.847-04:00",
+   "name"=>"gpo_affiliated"},
+ "questionnaire_answers"=>
+  [{"id"=>6,
+    "question_id"=>1,
+    "question_option_id"=>1,
+    "marketer_id"=>346,
+    "value"=>"true",
+    "created_at"=>"2018-07-31T15:50:48.675-04:00",
+    "updated_at"=>"2018-07-31T15:50:48.675-04:00",
+    "lead_id"=>125},
+   {"id"=>7,
+    "question_id"=>2,
+    "question_option_id"=>2,
+    "marketer_id"=>346,
+    "value"=>"true",
+    "created_at"=>"2018-07-31T15:59:00.069-04:00",
+    "updated_at"=>"2018-07-31T15:59:00.069-04:00",
+    "lead_id"=>125}],
+ "notes"=>nil,
+ "follow_up_date"=>nil,
+ "visit_date"=>nil,
+ "versions"=>
+  [{"id"=>362,
+    "item_type"=>"Lead",
+    "item_id"=>125,
+    "event"=>"update",
+    "whodunnit"=>nil,
+    "object"=>
+     "{\"id\":null,\"salesperson_id\":null,\"marketer_id\":null,\"customer_id\":null,\"address_id\":null,\"first_name\":null,\"last_name\":null,\"business_name\":null,\"phone\":null,\"email\":null,\"lead_status\":\"follow_up\",\"created_at\":null,\"updated_at\":null,\"follow_up_date\":null,\"notes\":null,\"visit_date\":null,\"questionnaire_id\":null,\"questionnaire_status\":\"unstarted\"}",
+    "created_at"=>"2018-07-31T15:47:21.494-04:00",
+    "object_changes"=>
+     "{\"id\":[null,125],\"first_name\":[null,\"John\"],\"last_name\":[null,\"Smith\"],\"phone\":[null,\"1234567890\"],\"created_at\":[null,\"2018-07-31T19:47:21.494Z\"],\"updated_at\":[null,\"2018-07-31T19:47:21.494Z\"],\"questionnaire_id\":[null,1]}"},
+   {"id"=>363,
+    "item_type"=>"Lead",
+    "item_id"=>125,
+    "event"=>"create",
+    "whodunnit"=>nil,
+    "object"=>nil,
+    "created_at"=>"2018-07-31T15:47:21.494-04:00",
+    "object_changes"=>nil},
+   {"id"=>364,
+    "item_type"=>"Lead",
+    "item_id"=>125,
+    "event"=>"update",
+    "whodunnit"=>nil,
+    "object"=>
+     "{\"id\":125,\"salesperson_id\":null,\"marketer_id\":null,\"customer_id\":null,\"address_id\":null,\"first_name\":\"John\",\"last_name\":\"Smith\",\"business_name\":null,\"phone\":\"1234567890\",\"email\":null,\"lead_status\":\"follow_up\",\"created_at\":\"2018-07-31T19:47:21.494Z\",\"updated_at\":\"2018-07-31T19:47:21.494Z\",\"follow_up_date\":null,\"notes\":null,\"visit_date\":null,\"questionnaire_id\":1,\"questionnaire_status\":\"unstarted\"}",
+    "created_at"=>"2018-07-31T15:54:26.932-04:00",
+    "object_changes"=>
+     "{\"first_name\":[\"John\",\"Saul\"],\"updated_at\":[\"2018-07-31T19:47:21.494Z\",\"2018-07-31T19:54:26.932Z\"]}"},
+   {"id"=>365,
+    "item_type"=>"Lead",
+    "item_id"=>125,
+    "event"=>"update",
+    "whodunnit"=>nil,
+    "object"=>
+     "{\"id\":125,\"salesperson_id\":null,\"marketer_id\":null,\"customer_id\":null,\"address_id\":null,\"first_name\":\"Saul\",\"last_name\":\"Smith\",\"business_name\":null,\"phone\":\"1234567890\",\"email\":null,\"lead_status\":\"follow_up\",\"created_at\":\"2018-07-31T19:47:21.494Z\",\"updated_at\":\"2018-07-31T19:54:26.932Z\",\"follow_up_date\":null,\"notes\":null,\"visit_date\":null,\"questionnaire_id\":1,\"questionnaire_status\":\"unstarted\"}",
+    "created_at"=>"2018-07-31T16:02:52.627-04:00",
+    "object_changes"=>
+     "{\"marketer_id\":[null,346],\"customer_id\":[null,152],\"updated_at\":[\"2018-07-31T19:54:26.932Z\",\"2018-07-31T20:02:52.627Z\"],\"questionnaire_status\":[\"unstarted\",\"started\"]}"}],
+ "created_at"=>"2018-07-31T15:47:21.494-04:00",
+ "updated_at"=>"2018-07-31T16:02:52.627-04:00",
+ "questionnaire"=>
+  {"id"=>1,
+   "name"=>"Health & Medical",
+   "questions"=>
+    [{"id"=>1,
+      "type"=>"MultipleChoiceQuestion",
+      "content"=>
+       "If we can help you save money and provide superior customer service and support, would you be interested in being visited by one of our account managers who can provide you with a proposal?",
+      "position"=>1,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>2,
+      "prev_question_id"=>nil,
+      "question_options"=>
+       [{"id"=>1,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Yes",
+         "name"=>"yes",
+         "position"=>1},
+        {"id"=>2,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No",
+         "name"=>"no",
+         "position"=>2}]},
+     {"id"=>2,
+      "type"=>"MultipleSelectQuestion",
+      "content"=>"How do you place orders?",
+      "position"=>2,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>3,
+      "prev_question_id"=>1,
+      "question_options"=>
+       [{"id"=>3,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Online",
+         "name"=>"online",
+         "position"=>1},
+        {"id"=>4,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Phone",
+         "name"=>"phone",
+         "position"=>2},
+        {"id"=>5,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Fax",
+         "name"=>"fax",
+         "position"=>3},
+        {"id"=>6,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"E-mail",
+         "name"=>"email",
+         "position"=>4},
+        {"id"=>7,
+         "input"=>"text",
+         "data_type"=>"string",
+         "label"=>"Other",
+         "name"=>"other",
+         "position"=>5},
+        {"id"=>8,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>6}]},
+     {"id"=>3,
+      "type"=>"MultipleChoiceQuestion",
+      "content"=>
+       "Do you know if you are currently affiliated with any Group Purchasing Organization?",
+      "position"=>3,
+      "required"=>true,
+      "has_questions"=>true,
+      "next_question_id"=>5,
+      "prev_question_id"=>2,
+      "questions"=>
+       [{"id"=>4,
+         "type"=>"MultipleSelectQuestion",
+         "content"=>"With which GPO are you affiliated?",
+         "position"=>1,
+         "required"=>true,
+         "has_questions"=>false,
+         "next_question_id"=>nil,
+         "prev_question_id"=>nil,
+         "question_options"=>
+          [{"id"=>12,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"Premier",
+            "name"=>"premier",
+            "position"=>1},
+           {"id"=>13,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"HPG",
+            "name"=>"hpg",
+            "position"=>2},
+           {"id"=>14,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"Vizient",
+            "name"=>"vizient",
+            "position"=>3},
+           {"id"=>15,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"Intalare",
+            "name"=>"intalare",
+            "position"=>4},
+           {"id"=>16,
+            "input"=>"text",
+            "data_type"=>"string",
+            "label"=>"Other",
+            "name"=>"other",
+            "position"=>5},
+           {"id"=>17,
+            "input"=>"radio",
+            "data_type"=>"boolean",
+            "label"=>"No Answer",
+            "name"=>"no_answer",
+            "position"=>6}]}],
+      "question_options"=>
+       [{"id"=>9,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Yes",
+         "name"=>"yes",
+         "position"=>1},
+        {"id"=>10,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No",
+         "name"=>"no",
+         "position"=>2},
+        {"id"=>11,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>3}]},
+     {"id"=>5,
+      "type"=>"MultipleChoiceQuestion",
+      "content"=>
+       "Would you be interested in purchasing high-quality, brand-name products you are familiar with at prices that are the same or better than your current distributor's private label brand?",
+      "position"=>4,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>6,
+      "prev_question_id"=>3,
+      "question_options"=>
+       [{"id"=>18,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Yes",
+         "name"=>"yes",
+         "position"=>1},
+        {"id"=>19,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No",
+         "name"=>"no",
+         "position"=>2},
+        {"id"=>20,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>3}]},
+     {"id"=>6,
+      "type"=>"MultipleSelectQuestion",
+      "content"=>
+       "Rank the following concerns that you have with your current distribution (scale of 1-10 with 1 meaning not a concern at all and 10 being a major concern).",
+      "position"=>5,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>7,
+      "prev_question_id"=>5,
+      "question_options"=>
+       [{"id"=>21,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Pricing",
+         "name"=>"pricing",
+         "position"=>1},
+        {"id"=>22,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Product Availability/Backorders",
+         "name"=>"availability",
+         "position"=>2},
+        {"id"=>23,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Product Quality",
+         "name"=>"quality",
+         "position"=>3},
+        {"id"=>24,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Delivery",
+         "name"=>"delivery",
+         "position"=>4},
+        {"id"=>25,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Customer Service",
+         "name"=>"service",
+         "position"=>5},
+        {"id"=>26,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>
+          "Accessibility/Availability of your account manager",
+         "name"=>"manager",
+         "position"=>6},
+        {"id"=>27,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>
+          "Equipment repair and availability of loaner equipment",
+         "name"=>"equipment",
+         "position"=>7},
+        {"id"=>28,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>
+          "Accounting (invoicing, statements, credits and returns)",
+         "name"=>"accounting",
+         "position"=>8},
+        {"id"=>29,
+         "input"=>"range",
+         "data_type"=>"integer",
+         "label"=>"Ease of Ordering",
+         "name"=>"ordering",
+         "position"=>9}]},
+     {"id"=>7,
+      "type"=>"MultipleSelectQuestion",
+      "content"=>
+       "From which distributor are you currently buying medical supplies?",
+      "position"=>6,
+      "required"=>true,
+      "has_questions"=>false,
+      "next_question_id"=>8,
+      "prev_question_id"=>6,
+      "question_options"=>
+       [{"id"=>30,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"McKesson",
+         "name"=>"mckesson",
+         "position"=>1},
+        {"id"=>31,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Henry Schein",
+         "name"=>"henry_schein",
+         "position"=>2},
+        {"id"=>32,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"Medline",
+         "name"=>"medline",
+         "position"=>3},
+        {"id"=>33,
+         "input"=>"text",
+         "data_type"=>"string",
+         "label"=>"Other",
+         "name"=>"other",
+         "position"=>4},
+        {"id"=>34,
+         "input"=>"radio",
+         "data_type"=>"boolean",
+         "label"=>"No Answer",
+         "name"=>"no_answer",
+         "position"=>5}]},
+     {"id"=>8,
+      "type"=>"FreeTextQuestion",
+      "content"=>
+       "Is there anything else that I haven't covered that you feel is important when evaluating or selecting a supplier?",
+      "position"=>7,
+      "required"=>false,
+      "has_questions"=>false,
+      "next_question_id"=>9,
+      "prev_question_id"=>7,
+      "question_options"=>
+       [{"id"=>35,
+         "input"=>"textarea",
+         "data_type"=>"string",
+         "label"=>nil,
+         "name"=>"evaluating_supplier",
+         "position"=>1}]},
+     {"id"=>9,
+      "type"=>"FreeTextQuestion",
+      "content"=>
+       "If you could change one thing about your current supplier what would it be and why?",
+      "position"=>8,
+      "required"=>false,
+      "has_questions"=>false,
+      "next_question_id"=>nil,
+      "prev_question_id"=>8,
+      "question_options"=>
+       [{"id"=>36,
+         "input"=>"textarea",
+         "data_type"=>"string",
+         "label"=>nil,
+         "name"=>"change_supplier",
+         "position"=>1}]}]}}
 ```
 
 ## Create QuestionAnswer
@@ -1804,7 +1663,8 @@ value | required | The serialized string value of answer. The data type is deter
   "id": 15,
   "question_id": 1,
   "question_option_id": 4,
-  "value": 'true'
+  "value": 'true',
+  "lead_id": 125
 }
 ```
 
@@ -1827,13 +1687,15 @@ question_answers | required | array of question answers, each containing <b>ques
   "id": 15,
   "question_id": 1,
   "question_option_id": 4,
-  "value": '6'
+  "value": '6',
+  "lead_id": 125
 },
 {
   "id": 16,
   "question_id": 1,
   "question_option_id": 6,
-  "value": '2'
+  "value": '2',
+  "lead_id": 125
 }]
 ```
 
@@ -1857,7 +1719,8 @@ value | required | The serialized string value of answer. The data type is deter
   "id": 15,
   "question_id": 1,
   "question_option_id": 4,
-  "value": 'true'
+  "value": 'true',
+  "lead_id": 125
 }
 ```
 
@@ -1880,12 +1743,14 @@ question_answers | required | array of question answers, each containing <b>id</
   "id": 15,
   "question_id": 1,
   "question_option_id": 4,
-  "value": '6'
+  "value": '6',
+  "lead_id": 125
 },
 {
   "id": 16,
   "question_id": 1,
   "question_option_id": 6,
-  "value": '2'
+  "value": '2',
+  "lead_id": 125
 }]
 ```
